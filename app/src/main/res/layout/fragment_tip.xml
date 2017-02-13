@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.therise.nyc.therisenyc.IntroDialogFragment">
+
+    <ImageView
+        android:id="@+id/dialog_location_logo"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_margin="10dip"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/location_icon_label"
+        android:src="@drawable/ic_place_black_24dp"
+        />
+
+    <TextView android:id="@+id/dialog_location_about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/locations_desc"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity = "center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/dialog_location_logo"
+        android:paddingBottom="20dp"
+        />
+
+    <ImageView
+        android:id="@+id/dialog_fitness_logo"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_margin="10dip"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/workout_icon_label"
+        android:src="@drawable/ic_fitness_center_black_24px"
+        android:layout_below="@id/dialog_location_about"
+        />
+
+    <TextView android:id="@+id/dialog_fitness_about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/workout_desc"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/dialog_fitness_logo"
+        />
+
+    <CheckBox
+        android:text="@string/fragment_tip_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_fitness_about"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="30dp"
+        android:id="@+id/checkBox" />
+
+    <Button
+        android:text="@string/gotit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/checkBox"
+        android:id="@+id/button"
+        android:layout_margin="10dp"
+        android:background="@color/black"
+        android:textColor="@color/white"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

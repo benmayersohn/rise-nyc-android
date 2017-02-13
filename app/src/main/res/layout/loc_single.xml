@@ -1,0 +1,84 @@
+<!-- Template for single website. Title, location, image, description -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/loc_single"
+    tools:context="com.therise.nyc.therisenyc.LocationFragment">
+
+    <TextView
+        android:text="@string/title_activity_sample"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:background="@drawable/rect_border2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/textView1"
+        android:gravity="center_vertical|center_horizontal"
+        android:padding="5dp"
+        android:typeface="sans"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black" />
+
+    <ImageView
+        android:layout_width="293dp"
+        android:layout_height="214dp"
+        app:srcCompat="@drawable/badass20160614"
+        android:id="@+id/imageView1"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rect_border"
+        android:paddingTop="0dp"
+        android:contentDescription="@string/loc_single_img"/>
+
+    <TextView
+        android:text="@string/hello_blank_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:padding="10dp"
+        android:background="@drawable/rect_border3"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:typeface="sans"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:text="@string/hello_blank_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginTop="15dp"
+        android:typeface="sans"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:text="@string/samp_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:typeface="sans"
+        android:padding="15dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rect_border4"
+        android:textColor="@color/black"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="14sp"
+        android:lineSpacingExtra="2sp" />
+
+</LinearLayout>

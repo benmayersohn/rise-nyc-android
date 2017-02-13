@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/fragment_save_presets"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.therise.nyc.therisenyc.LoadPresetsDialogFragment">
+
+    <TextView android:id="@+id/save_presets_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save_preset_dialog"
+        android:layout_marginTop="30dp"
+        android:gravity = "center_horizontal"
+        />
+
+    <EditText android:id="@+id/preset_name"
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rect_border2"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp">
+    </EditText>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@id/presets_list_view">
+    </ListView>
+
+    <Button android:id="@+id/save_preset_button"
+        android:layout_width="match_parent"
+        android:text="@string/save_preset_button"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rect_border2"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal">
+    </Button>
+
+    <TextView
+        android:id="@+id/same_name_warning"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/red"
+        android:textAlignment="center"
+        android:text="@string/same_name_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"/>
+
+</LinearLayout>

@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Colors for the Rise theme -->
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#505250</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFFFFF</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="fuchsia">#FF00FF</color>
+    <color name="red">#FF0000</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="gray">#808080</color>
+    <color name="olive">#808000</color>
+    <color name="purple">#800080</color>
+    <color name="maroon">#800000</color>
+    <color name="aqua">#00FFFF</color>
+    <color name="lime">#00FF00</color>
+    <color name="teal">#008080</color>
+    <color name="green">#008000</color>
+    <color name="blue">#0000ff</color>
+    <color name="navy">#000080</color>
+    <color name="black">#000000</color>
+    <color name="background_color">#000000</color>
+    <color name="border_color">#000000</color>
+    <color name="background_color2">#CCFFFFFF</color>
+    <color name="border_color2">#1995C8</color>
+    <color name="background_color3">#CC000000</color>
+    <color name="border_color3">#1995C8</color>
+    <color name="background_color4">#FFFFFF</color>
+    <color name="border_color4">#1995C8</color>
+    <color name="rest_color">#1EC819</color>
+    <color name="work_color">#FF0000</color>
+    <color name="break_color">#FEA514</color>
+    <color name="prep_color">#00FFFF</color>
 </resources>

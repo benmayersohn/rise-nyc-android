@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="com.therise.nyc.therisenyc.StopTimerDialogFragment">
+
+    <TextView android:id="@+id/stop_timer_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/stop_timer_dialog"
+        android:layout_marginTop="30dp"
+        android:gravity = "center_horizontal"
+        />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/pause"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_border2"
+            android:src="@drawable/ic_pause_black_24dp"
+            android:id="@+id/pause_button" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/stop"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_border2"
+            android:src="@drawable/ic_stop_black_24dp"
+            android:id="@+id/stop_button" />
+        </LinearLayout>
+
+</LinearLayout>

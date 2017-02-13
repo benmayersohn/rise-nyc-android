@@ -1,0 +1,567 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.therise.nyc.therisenyc.CardsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/cards_instructions_box"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:baselineAligned="false"
+        android:weightSum="3"
+        android:gravity="center_horizontal"
+        android:divider="@color/black">
+
+        <TextView
+            android:text="@string/cards_dice_instructions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:id="@+id/cards_instructions"
+            android:gravity="center_vertical"
+            />
+
+        </LinearLayout>
+
+    <!-- DIVIDER -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/darker_gray"/>
+
+    <!-- ROW 1 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/row1"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:baselineAligned="false"
+        android:weightSum="3"
+        android:gravity="center_horizontal"
+        android:divider="@color/black">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="0dp"
+            android:id="@+id/row1_grid1"
+            android:layout_marginEnd="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:contentDescription="@string/hearts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:id="@+id/hearts"
+                android:src="@drawable/hearts"
+                android:gravity="center_vertical"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/row1_grid2"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:id="@+id/hearts_exercise"
+                android:textAlignment="center"
+                android:spinnerMode="dropdown"
+                android:background="@drawable/rect_border2"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/row1_grid3"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:scaleX="1.6"
+            android:scaleY="1.6"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:contentDescription="@string/save_exercise"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/add_exercise"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_save_black_24dp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ROW 2 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/row2"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:baselineAligned="false"
+        android:weightSum="3"
+        android:gravity="center_horizontal"
+        android:divider="@color/black">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="0dp"
+            android:id="@+id/row2_grid1"
+            android:layout_marginEnd="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:contentDescription="@string/clubs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:id="@+id/clubs"
+                android:src="@drawable/clubs"
+                android:gravity="center_vertical"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/row2_grid2"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/clubs_exercise"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textAlignment="center"
+                android:background="@drawable/rect_border2"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/row6_grid3"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:scaleX="1.6"
+            android:scaleY="1.6"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:contentDescription="@string/save_exercise"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@id/add_exercise"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_save_black_24dp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ROW 3 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/row3"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:baselineAligned="false"
+        android:weightSum="3"
+        android:gravity="center_horizontal"
+        android:divider="@color/black">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="0dp"
+            android:id="@+id/row3_grid1"
+            android:layout_marginEnd="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:contentDescription="@string/diamonds"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:id="@+id/diamonds"
+                android:src="@drawable/diamonds"
+                android:gravity="center_vertical"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/row3_grid2"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/diamonds_exercise"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textAlignment="center"
+                android:background="@drawable/rect_border2"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/row3_grid3"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:scaleX="1.6"
+            android:scaleY="1.6"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:contentDescription="@string/save_exercise"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@id/add_exercise"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_save_black_24dp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ROW 4 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/row4"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:baselineAligned="false"
+        android:weightSum="3"
+        android:gravity="center_horizontal"
+        android:divider="@color/black">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="0dp"
+            android:id="@+id/row4_grid1"
+            android:layout_marginEnd="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:contentDescription="@string/spades"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:id="@+id/spades"
+                android:src="@drawable/spades"
+                android:gravity="center_vertical"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/row4_grid2"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/spades_exercise"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textAlignment="center"
+                android:background="@drawable/rect_border2"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/row4_grid3"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:scaleX="1.6"
+            android:scaleY="1.6"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:contentDescription="@string/save_exercise"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@id/add_exercise"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_save_black_24dp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ROW 5 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/row5"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:baselineAligned="false"
+        android:weightSum="1"
+        android:gravity="center_horizontal"
+        android:divider="@color/black">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="0dp"
+            android:id="@+id/row5_grid1"
+            android:layout_marginEnd="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".3"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center_vertical"
+            tools:ignore="UselessParent">
+
+            <CheckBox
+                android:text="@string/has_jokers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/has_jokers"
+                android:src="@drawable/spades"
+                android:textAlignment="textStart"
+                android:layout_gravity="start"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- DIVIDER -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/darker_gray"/>
+
+    <!-- ROW 6 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/row6"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:baselineAligned="false"
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:id="@+id/row6_grid1"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical">
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/play_desc"
+                android:background="@drawable/rect_border2"
+                android:id="@+id/play_button_image"
+                android:textColor="@color/rest_color"
+                android:src="@drawable/ic_play_arrow_black_24dp"
+                android:gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="0dp"
+            android:id="@+id/row6_grid2"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical">
+
+            <Button
+                android:text="@string/load_presets_text"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/load_presets_text"
+                android:background="@drawable/rect_border2"
+                android:textColor="@color/black"
+                android:gravity="center_vertical"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/row2_grid3"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:text="@string/save_presets_text"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/save_presets_text"
+                android:background="@drawable/rect_border2"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:gravity="center_vertical" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

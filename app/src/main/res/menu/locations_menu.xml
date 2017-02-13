@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/organize"
+        android:icon="@drawable/ic_sort_white_24px"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/organize_by"
+        android:color="@color/white">
+        <menu>
+            <item
+                android:id="@+id/by_dayofweek"
+                app:showAsAction="never|withText"
+                android:title="@string/by_dayofweek"
+                android:color="@color/white">
+                </item>
+            <item
+                android:id="@+id/by_borough"
+                app:showAsAction="never|withText"
+                android:title="@string/by_borough"
+                android:color="@color/white">
+            </item>
+        </menu>
+    </item>
+    <item
+        android:id="@id/settings"
+        android:icon="@drawable/ic_settings_white_24dp"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/settings">
+    </item>
+</menu>
