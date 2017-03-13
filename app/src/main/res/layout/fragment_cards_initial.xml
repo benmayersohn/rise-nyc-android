@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/cards_layout_initial"
     tools:context="com.therise.nyc.therisenyc.CardsFragment">
 
     <LinearLayout
@@ -21,7 +22,7 @@
         android:divider="@color/black">
 
         <TextView
-            android:text="@string/cards_dice_instructions"
+            android:text="@string/cards_instructions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
@@ -73,6 +74,7 @@
                 android:layout_height="match_parent"
                 android:textAlignment="center"
                 android:id="@+id/hearts"
+                android:background="#00FFFFFF"
                 android:src="@drawable/hearts"
                 android:gravity="center_vertical"
                 />
@@ -92,17 +94,19 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center_vertical">
 
-            <Spinner
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="20sp"
                 android:id="@+id/hearts_exercise"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
                 android:textAlignment="center"
-                android:spinnerMode="dropdown"
                 android:background="@drawable/rect_border2"
                 android:textColor="@color/black"
-                android:textSize="30sp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>
@@ -126,7 +130,7 @@
                 android:contentDescription="@string/save_exercise"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/add_exercise"
+                android:id="@+id/save_hearts"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_save_black_24dp"
                 android:gravity="center_vertical"/>
@@ -189,16 +193,19 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center_vertical">
 
-            <Spinner
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/clubs_exercise"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:layout_marginBottom="5dp"
+                android:textSize="20sp"
                 android:textAlignment="center"
                 android:background="@drawable/rect_border2"
                 android:textColor="@color/black"
-                android:textSize="30sp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>
@@ -209,7 +216,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="10dp"
-            android:id="@+id/row6_grid3"
+            android:id="@+id/row2_grid3"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="10dp"
             android:focusable="true"
@@ -222,7 +229,7 @@
                 android:contentDescription="@string/save_exercise"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/add_exercise"
+                android:id="@+id/save_clubs"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_save_black_24dp"
                 android:gravity="center_vertical"/>
@@ -285,16 +292,19 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center_vertical">
 
-            <Spinner
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/diamonds_exercise"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:textSize="20sp"
                 android:textAlignment="center"
                 android:background="@drawable/rect_border2"
                 android:textColor="@color/black"
-                android:textSize="30sp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>
@@ -318,7 +328,7 @@
                 android:contentDescription="@string/save_exercise"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/add_exercise"
+                android:id="@+id/save_diamonds"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_save_black_24dp"
                 android:gravity="center_vertical"/>
@@ -381,16 +391,19 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center_vertical">
 
-            <Spinner
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/spades_exercise"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:layout_marginBottom="5dp"
+                android:textSize="20sp"
                 android:textAlignment="center"
                 android:background="@drawable/rect_border2"
                 android:textColor="@color/black"
-                android:textSize="30sp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>
@@ -414,7 +427,7 @@
                 android:contentDescription="@string/save_exercise"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/add_exercise"
+                android:id="@+id/save_spades"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_save_black_24dp"
                 android:gravity="center_vertical"/>
@@ -456,6 +469,7 @@
             <CheckBox
                 android:text="@string/has_jokers"
                 android:layout_width="match_parent"
+                android:checked="true"
                 android:layout_height="match_parent"
                 android:id="@+id/has_jokers"
                 android:src="@drawable/spades"
@@ -542,7 +556,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:id="@+id/row2_grid3"
+            android:id="@+id/row6_grid3"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:layout_height="match_parent"

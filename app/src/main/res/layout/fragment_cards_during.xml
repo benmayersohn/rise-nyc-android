@@ -4,11 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/cards_layout_during"
     android:weightSum = "3"
-    android:background="@drawable/jack_of_diamonds2"
     android:layout_margin = "10dp">
-
-    <LinearLayout
+    <RelativeLayout
     android:layout_width = "match_parent"
     android:layout_height = "0dp"
     android:layout_weight = ".4"
@@ -17,17 +16,21 @@
 
         <TextView
             android:text="@string/card_exercise"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/card_exercise"
             android:textAlignment="center"
-            android:textSize="30sp"
-            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:background="@drawable/rect_border3"
+            android:textColor="@color/white"
             android:textStyle="normal|bold"
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width = "match_parent"
@@ -49,7 +52,7 @@
                 android:layout_width="100dp"
                 android:layout_height="130dp"
                 android:id="@+id/left_arrow"
-                android:src="@drawable/ic_skip_previous_black_24dp"
+                android:src="@drawable/ic_skip_previous_grey_24dp"
                 android:scaleType="fitXY"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
@@ -71,7 +74,7 @@
                 android:layout_weight=".5"
                 android:id="@+id/current_card"
                 android:textAlignment="center"
-                android:textSize="30sp"
+                android:textSize="25sp"
                 android:textColor="@color/white"
                 android:textStyle="normal|bold"
                 android:gravity="center_vertical"
@@ -90,7 +93,7 @@
                 android:contentDescription="@string/right_arrow"
                 android:layout_width="100dp"
                 android:layout_height="130dp"
-                android:src="@drawable/ic_skip_next_black_24dp"
+                android:src="@drawable/ic_skip_next_blue_24dp"
                 android:id="@+id/right_arrow"
                 android:gravity="center"
                 android:scaleType="fitXY"
@@ -109,7 +112,8 @@
         android:layout_height="0dp"
         android:weightSum="3"
         android:layout_gravity="center"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:id="@+id/row3">
 
         <ImageButton
             android:layout_width="0dp"
@@ -141,13 +145,13 @@
             android:layout_marginRight="20dp" />
 
         <TextView
-            android:text="@string/time_left"
+            android:text="@string/time_elapsed"
             android:layout_width="wrap_content"
             android:layout_weight=".5"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:id="@+id/card_time_left"
-            android:textSize="30sp"
+            android:id="@+id/card_time_elapsed"
+            android:textSize="25sp"
             android:textColor="@color/white"
             android:textStyle="normal|bold"
             android:layout_gravity="center_vertical"

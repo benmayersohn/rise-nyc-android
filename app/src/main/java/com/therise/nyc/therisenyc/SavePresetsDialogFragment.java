@@ -33,6 +33,18 @@ import static android.view.View.INVISIBLE;
 public class SavePresetsDialogFragment extends DialogFragment {
 
     private static final String PRESETS = "presets";
+    private static final String EXERCISE = "EXERCISE";
+    private static final String TYPED_NAME = "TYPED_NAME";
+    private static final String PRESET_TYPE = "PRESET_TYPE";
+
+    private static final String WORKOUT_TYPE = "WORKOUT_TYPE";
+
+    private static final String BLANK = "";
+
+    // Workout types
+    private static final String CARDS = "CARDS";
+    private static final String TIMER = "TIMER";
+    private static final String DICE = "DICE";
 
     private static final String SAVE_DIALOG = "SAVE_DIALOG";
     private static final String CHOSEN_NAME = "CHOSEN_NAME";
@@ -52,20 +64,23 @@ public class SavePresetsDialogFragment extends DialogFragment {
     public SavePresetsDialogFragment(){}
 
     // Create a new instance
-    static SavePresetsDialogFragment newInstance(ArrayList<String> presetNames) {
+    static SavePresetsDialogFragment newInstance(ArrayList<String> presetNames, String workoutType, String presetType, String typedName) {
         SavePresetsDialogFragment f = new SavePresetsDialogFragment();
 
         // Supply presets
         Bundle args = new Bundle();
         args.putStringArrayList(PRESETS,presetNames);
+        args.putString(WORKOUT_TYPE,workoutType);
+        args.putString(PRESET_TYPE,presetType);
+        args.putString(TYPED_NAME,typedName);
         f.setArguments(args);
 
         return f;
     }
 
     public interface UpdatePresets{
-        void updateSaveFragment();
-        void updateLoadFragment();
+        void updateSaveFragment(String presetType, String typedName);
+        void updateLoadFragment(String presetType, int index);
     }
 
     @Override
@@ -91,6 +106,11 @@ public class SavePresetsDialogFragment extends DialogFragment {
 
         // force all writing to upper-case
         entryView.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+
+        // Set the text as the current exercise, if we're saving an exercise
+        if (getArguments().getString(PRESET_TYPE).equals(EXERCISE)){
+            entryView.setText(getArguments().getString(TYPED_NAME));
+        }
 
         duplicateWarning = (TextView) v.findViewById(R.id.same_name_warning);
 
@@ -134,11 +154,31 @@ public class SavePresetsDialogFragment extends DialogFragment {
 
                     Intent intent = new Intent();
                     intent.putExtra(CHOSEN_NAME, chosenName);
+                    intent.putExtra(PRESET_TYPE,getArguments().getString(PRESET_TYPE));
                     getTargetFragment().onActivityResult(getTargetRequestCode(), SAVE_CODE, intent);
 
                     // Updates presets with new entry
-                    ((TimerFragment)getTargetFragment()).updateSaveFragment();
-                    ((TimerFragment)getTargetFragment()).updateLoadFragment();
+                    switch (getArguments().getString(WORKOUT_TYPE)){
+                        case TIMER:
+                            ((TimerFragment)getTargetFragment()).updateSaveFragment(
+                                    getArguments().getString(PRESET_TYPE),getArguments().getString(TYPED_NAME));
+                            ((TimerFragment)getTargetFragment()).updateLoadFragment(
+                                    getArguments().getString(PRESET_TYPE),-1);
+                            break;
+                        case DICE:
+                            ((DiceFragment)getTargetFragment()).updateSaveFragment(
+                                    getArguments().getString(PRESET_TYPE),getArguments().getString(TYPED_NAME));
+                            ((DiceFragment)getTargetFragment()).updateLoadFragment(
+                                    getArguments().getString(PRESET_TYPE),-1);
+                            break;
+                        case CARDS:
+                            ((CardsFragment)getTargetFragment()).updateSaveFragment(
+                                    getArguments().getString(PRESET_TYPE),getArguments().getString(TYPED_NAME));
+                            ((CardsFragment)getTargetFragment()).updateLoadFragment(
+                                    getArguments().getString(PRESET_TYPE),-1);
+                            break;
+                    }
+
 
                     // Close fragment
                     FragmentManager fm = getFragmentManager();
@@ -155,7 +195,9 @@ public class SavePresetsDialogFragment extends DialogFragment {
 
         // Set up listview
         lv = (ListView) v.findViewById(R.id.presets_list_view);
-        adapter = new LoadPresetsAdapter(getActivity(), getTargetFragment(), getTargetRequestCode(), SAVE_CODE, getArguments().getStringArrayList(PRESETS));
+        adapter = new LoadPresetsAdapter(getActivity(), getTargetFragment(),
+                getTargetRequestCode(), SAVE_CODE, getArguments().getStringArrayList(PRESETS),
+                getArguments().getString(PRESET_TYPE), -1);
         lv.setAdapter(adapter);
 
         // Return to activity

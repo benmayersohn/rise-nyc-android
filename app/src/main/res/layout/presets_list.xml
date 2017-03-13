@@ -13,7 +13,7 @@
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:background="@color/black"
-        android:textColor="@color/white" />
+        android:background="@color/white"
+        android:textColor="@color/black" />
 
 </LinearLayout>

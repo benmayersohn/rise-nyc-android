@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.TabLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.content.Context;
 import android.view.WindowManager;
 
 /**
@@ -21,7 +20,7 @@ import android.view.WindowManager;
  */
 
 public class WorkoutActivity extends AppCompatActivity
-        implements StopTimerDialogFragment.OnTimerStopped,
+        implements StopDialogFragment.OnWorkoutStopped,
         EndTimerDialogFragment.OnTimerEnded
 {
 
@@ -34,6 +33,10 @@ public class WorkoutActivity extends AppCompatActivity
     private static final int TIMER_VIEW = 0;
     private static final int DICE_VIEW = 1;
     private static final int CARDS_VIEW = 2;
+
+    private static final String TIMER = "TIMER";
+    private static final String CARDS = "CARDS";
+    private static final String DICE = "DICE";
 
     WorkoutPagerAdapter pagerAdapter;
 
@@ -98,23 +101,29 @@ public class WorkoutActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTimerStopped()
+    public void onWorkoutStopped(String workoutType)
     {
         // Refresh the pager
-        pager.setAdapter(pagerAdapter);
+        if (workoutType.equals(TIMER)) {
+            pager.setAdapter(pagerAdapter);
+        }
     }
 
     @Override
-    public void onTimerEnded(){
+    public void onTimerEnded(String workoutType){
         // Refresh the pager
-        pager.setAdapter(pagerAdapter);
+        if (workoutType.equals(TIMER)) {
+            pager.setAdapter(pagerAdapter);
+        }
     }
 
     // We're either on timer page, dice page, or cards page
     // Instantiate appropriate fragment
     private class WorkoutPagerAdapter extends FragmentStatePagerAdapter{
         public WorkoutPagerAdapter(FragmentManager fm){
+
             super(fm);
+
         }
 
         @Override

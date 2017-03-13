@@ -1,5 +1,6 @@
 package com.therise.nyc.therisenyc;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -12,34 +13,35 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
-/**
- * IntroDialogFragment: Explains how to use the program when first opening
- * Includes a checkmark for users to indicate they are familiar with this dialog and would
- * not like to see it again.
- *
- * This dialog should only show if we have it set in our preferences to show
- */
-
 public class EndTimerDialogFragment extends DialogFragment {
 
     private Button okay;  // end workout
 
     private static final String END_DIALOG = "END_DIALOG";
+    private static final String WORKOUT_TYPE = "WORKOUT_TYPE";
+
+    private static final String TIMER = "TIMER";
+    private static final String CARDS = "CARDS";
+    private static final String DICE = "DICE";
+
+    private static final int STOP_CODE = 1;
+
 
     // This allows our activity to refresh the timer fragment
     public interface OnTimerEnded{
-        void onTimerEnded();
+        void onTimerEnded(String workoutType);
     }
 
     // Empty constructor
     public EndTimerDialogFragment(){}
 
     // Create a new instance
-    static EndTimerDialogFragment newInstance() {
+    static EndTimerDialogFragment newInstance(String workoutType) {
         EndTimerDialogFragment f = new EndTimerDialogFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
+        args.putString(WORKOUT_TYPE,workoutType);
         f.setArguments(args);
 
         return f;
@@ -74,6 +76,10 @@ public class EndTimerDialogFragment extends DialogFragment {
         okay.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick (View v){
+
+                // Tell fragment to stop timer
+                getTargetFragment().onActivityResult(getTargetRequestCode(),STOP_CODE, new Intent());
+
                 // Close fragment
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
@@ -82,7 +88,7 @@ public class EndTimerDialogFragment extends DialogFragment {
                 ft.commit();
 
                 // Refresh view
-                ((WorkoutActivity)getActivity()).onTimerEnded();
+                ((WorkoutActivity)getActivity()).onTimerEnded(getArguments().getString(WORKOUT_TYPE));
 
             }
         });

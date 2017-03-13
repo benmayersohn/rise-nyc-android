@@ -19,24 +19,39 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+// This is our list adapter for the presets/exercises
+// If we're loading an exercise, make sure that the name appears in the text box
+
 // Construct custom view for each fragment
 public class LoadPresetsAdapter extends BaseAdapter{
 
     private ArrayList<String> presetNames;
+    private String presetType;
     private static LayoutInflater inflater=null;
     private FragmentActivity act;
     private Fragment targetFragment;
     private int requestCode;
     private int resultCode;
+    private int index;
 
     private static final String LOAD_DIALOG = "LOAD_DIALOG";
     private static final String SELECTED_ENTRY = "SELECTED_ENTRY";
     private static final String DELETE_ENTRY = "DELETE_ENTRY";
+    private static final String PRESET_TYPE = "PRESET_TYPE";
+    private static final String INDEX = "INDEX";
+
+    private static final String PRESET = "PRESET";
+    private static final String EXERCISE = "EXERCISE";
+
     private static final int LOAD_CODE = 2;
 
     // Construct view
-    public LoadPresetsAdapter(FragmentActivity act, Fragment targetFragment, int requestCode, int resultCode, ArrayList<String> presetNames) {
+    public LoadPresetsAdapter(FragmentActivity act, Fragment targetFragment,
+                              int requestCode, int resultCode, ArrayList<String> presetNames,
+                              String presetType, int index) {
         this.presetNames = presetNames;
+        this.presetType = presetType;
+        this.index = index;
 
         this.act=act;
         this.targetFragment = targetFragment;
@@ -77,7 +92,12 @@ public class LoadPresetsAdapter extends BaseAdapter{
         intent.putExtra(SELECTED_ENTRY, position);
 
         // Are we deleting it?
-        intent.putExtra(DELETE_ENTRY,deleteEntry);
+        intent.putExtra(DELETE_ENTRY, deleteEntry);
+
+        intent.putExtra(INDEX, index);
+
+        // Are we displaying it? (we are if it's an exercise)
+        intent.putExtra(PRESET_TYPE,presetType);
 
         targetFragment.onActivityResult(requestCode, LOAD_CODE, intent);
 
@@ -129,9 +149,18 @@ public class LoadPresetsAdapter extends BaseAdapter{
 
                     int duration = Toast.LENGTH_SHORT;
 
-                    // We post a message that we deleted a preset
-                    Toast toast = Toast.makeText(act, R.string.preset_deleted, duration);
-                    toast.show();
+                    if (presetType.equals(PRESET)) {
+                        // We post a message that we deleted a preset
+                        Toast toast = Toast.makeText(act, R.string.preset_deleted, duration);
+                        toast.show();
+                    }
+
+                    if (presetType.equals(EXERCISE)) {
+                        // We post a message that we deleted a preset
+                        Toast toast = Toast.makeText(act, R.string.exercise_deleted, duration);
+                        toast.show();
+                    }
+
 
                     // entry deleted
                     chooseEntry(position, true);

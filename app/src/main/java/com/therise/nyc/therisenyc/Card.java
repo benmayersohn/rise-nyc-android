@@ -13,20 +13,18 @@ public class Card {
 
     private int id; // ID of drawable
 
-    private String number; // number on card (or type for face card)
+    private int number; // number on card
     private String suit; // suit of card
     private String name; // full name of card (for display)
 
     private boolean _isPictureCard;
     private boolean _isJoker;
 
-    private static final Class DRAWABLE_CLASS = R.drawable.class;
-
+    // names
     public static final String JACK = "jack";
     public static final String QUEEN = "queen";
     public static final String KING = "king";
     public static final String ACE = "ace";
-    public static final String JOKER = "joker";
     public static final String TWO = "two";
     public static final String THREE = "three";
     public static final String FOUR = "four";
@@ -36,6 +34,23 @@ public class Card {
     public static final String EIGHT = "eight";
     public static final String NINE = "nine";
     public static final String TEN = "ten";
+
+    public static final int JACK_VALUE = 11;
+    public static final int QUEEN_VALUE = 12;
+    public static final int KING_VALUE = 13;
+    public static final int ACE_VALUE_ONE = 14;
+    public static final int ACE_VALUE_TWO = 1;
+    public static final int JOKER_VALUE = 0;
+
+    public static final int TWO_VALUE = 2;
+    public static final int THREE_VALUE = 3;
+    public static final int FOUR_VALUE = 4;
+    public static final int FIVE_VALUE = 5;
+    public static final int SIX_VALUE = 6;
+    public static final int SEVEN_VALUE = 7;
+    public static final int EIGHT_VALUE = 8;
+    public static final int NINE_VALUE = 9;
+    public static final int TEN_VALUE = 10;
 
     public static final String CLUBS = "clubs";
     public static final String DIAMONDS = "diamonds";
@@ -52,16 +67,39 @@ public class Card {
     private static final String OF_ID = "_of_";
 
     // Create static map from strings to resource ID
-    private static final HashMap<String, Integer> resourceMap = createMap();
-    public static HashMap<String,Integer> createMap (){
+    private static final HashMap<String, Integer> resourceMap = createResourceMap();
+    private static final HashMap<Integer, String> numberMap = createNumberMap();
+
+    public static HashMap<Integer,String> createNumberMap (){
+        HashMap<Integer,String> map = new HashMap<>();
+        
+        map.put(TWO_VALUE,TWO);
+        map.put(THREE_VALUE,THREE);
+        map.put(FOUR_VALUE,FOUR);
+        map.put(FIVE_VALUE,FIVE);
+        map.put(SIX_VALUE,SIX);
+        map.put(SEVEN_VALUE,SEVEN);
+        map.put(EIGHT_VALUE,EIGHT);
+        map.put(NINE_VALUE,NINE);
+        map.put(TEN_VALUE,TEN);
+        map.put(JACK_VALUE,JACK);
+        map.put(QUEEN_VALUE,QUEEN);
+        map.put(KING_VALUE,KING);
+        map.put(ACE_VALUE_ONE,ACE);
+        map.put(ACE_VALUE_TWO,ACE);
+
+        return map;
+    }
+
+    public static HashMap<String,Integer> createResourceMap (){
         HashMap<String,Integer> map = new HashMap<>();
 
         // Add all values
         map.put(ACE + OF_ID + CLUBS, R.drawable.ace_of_clubs); map.put(ACE + OF_ID + HEARTS, R.drawable.ace_of_hearts);
         map.put(ACE + OF_ID + DIAMONDS, R.drawable.ace_of_diamonds); map.put(ACE + OF_ID + SPADES, R.drawable.ace_of_spades);
 
-        map.put(TWO + OF_ID + CLUBS, R.drawable.two_of_clubs); map.put(TWO + OF_ID + HEARTS, R.drawable.ace_of_hearts);
-        map.put(TWO + OF_ID + DIAMONDS, R.drawable.ace_of_diamonds); map.put(TWO + OF_ID + SPADES, R.drawable.ace_of_spades);
+        map.put(TWO + OF_ID + CLUBS, R.drawable.two_of_clubs); map.put(TWO + OF_ID + HEARTS, R.drawable.two_of_hearts);
+        map.put(TWO + OF_ID + DIAMONDS, R.drawable.two_of_diamonds); map.put(TWO + OF_ID + SPADES, R.drawable.two_of_spades);
 
         map.put(THREE + OF_ID + CLUBS, R.drawable.three_of_clubs); map.put(THREE + OF_ID + HEARTS, R.drawable.three_of_hearts);
         map.put(THREE + OF_ID + DIAMONDS, R.drawable.three_of_diamonds); map.put(THREE + OF_ID + SPADES, R.drawable.three_of_spades);
@@ -104,14 +142,26 @@ public class Card {
 
 
     // For all cards except jokers
-    public Card(String number, String suit){
+    public Card(int number, String suit){
         this.number = number;
         this.suit = suit;
 
         // Do we have a picture card?
-        if (number.equals(JACK) || number.equals(QUEEN) || number.equals(KING) || number.equals(ACE)){
+        if (number == JACK_VALUE){
             _isPictureCard = true;
-            name = firstUpperCase(number) + OF_DISPLAY + firstUpperCase(suit);
+            name = firstUpperCase(JACK) + OF_DISPLAY + firstUpperCase(suit);
+        }
+        else if (number == QUEEN_VALUE){
+            _isPictureCard = true;
+            name = firstUpperCase(QUEEN) + OF_DISPLAY + firstUpperCase(suit);
+        }
+        else if (number == KING_VALUE){
+            _isPictureCard = true;
+            name = firstUpperCase(KING) + OF_DISPLAY + firstUpperCase(suit);
+        }
+        else if (number == ACE_VALUE_ONE || number == ACE_VALUE_TWO){
+            _isPictureCard = true;
+            name = firstUpperCase(ACE) + OF_DISPLAY + firstUpperCase(suit);
         }
         else{
             _isPictureCard = false;
@@ -119,18 +169,32 @@ public class Card {
         }
 
         // Get ID from resourceMap
-        id = resourceMap.get(name + OF_ID + suit);
+        id = resourceMap.get(numberMap.get(number) + OF_ID + suit);
 
         // Not a joker if we're using this constructor
         _isJoker = false;
 
     }
 
+    // Cards are equal if they have the same name
+    @Override
+    public boolean equals(Object c) {
+        if (c == this){
+            return true;
+        }
+        if (!(c instanceof Card)){
+            return false;
+        }
+        Card c2 = (Card) c;
+
+        return (c2.getName().equals(this.getName()));
+    }
+
     // For jokers
     public Card(String jokerColor){
         id = resourceMap.get(jokerColor + JOKER_ID_STRING);
         name = firstUpperCase(jokerColor) + JOKER_NAME_STRING;
-        number = JOKER; // The type is a joker
+        number = JOKER_VALUE; // The type is a joker
         suit = jokerColor; // Call the suit the color of the joker
         _isJoker = true; // this is a joker
     }
@@ -141,7 +205,7 @@ public class Card {
     }
 
     // Getters and setters
-    public String getNumber(){
+    public int getNumber(){
         return number;
     }
 

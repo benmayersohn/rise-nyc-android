@@ -7,7 +7,7 @@ package com.therise.nyc.therisenyc;
 import com.google.gson.annotations.SerializedName;
 
 // Preset class for timer, to be converted from JSON file
-public class TimerPreset {
+public class TimerPreset implements Preset{
 
     @SerializedName("preset_name")
     public String presetName;
@@ -54,6 +54,8 @@ public class TimerPreset {
     @SerializedName("num_break_secs_ones")
     public int numBreakSecsOnes;
 
+    private static final String TEST = "TEST";
+
     // Construct preset with all properties
     public TimerPreset(String name, int numSets, int numReps,
                        int numWorkMins, int numWorkSecsTens, int numWorkSecsOnes,
@@ -77,10 +79,10 @@ public class TimerPreset {
         this.numBreakSecsTens = numBreakSecsTens;
     }
 
-    // Construct preset with just name
-    // make everything 0 by default
-    public TimerPreset(String name){
-        presetName = name;
+    // Construct default TEST preset
+    // make everything 5 seconds by default
+    public TimerPreset(){
+        presetName = TEST;
         this.numSets = 2;
         this.numReps = 1;
         this.numWorkMins = 0;
@@ -178,6 +180,7 @@ public class TimerPreset {
     }
 
 
+    @Override
     public String getName(){
         return presetName;
     }

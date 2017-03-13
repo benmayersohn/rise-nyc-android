@@ -11,7 +11,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 /**
- * LoadPresetsDialogFragment:
+ * LoadPresetsDialogFragment
  */
 
 public class LoadPresetsDialogFragment extends DialogFragment {
@@ -21,18 +21,22 @@ public class LoadPresetsDialogFragment extends DialogFragment {
     ListView lv;
 
     private static final String PRESETS = "presets";
+    private static final String PRESET_TYPE = "PRESET_TYPE";
+    private static final String INDEX = "INDEX";
     private static final int LOAD_CODE = 2;
 
     // Empty constructor
     public LoadPresetsDialogFragment(){}
 
     // Create a new instance
-    static LoadPresetsDialogFragment newInstance(ArrayList<String> presetNames) {
+    static LoadPresetsDialogFragment newInstance(ArrayList<String> presetNames, String presetType, int index) {
         LoadPresetsDialogFragment f = new LoadPresetsDialogFragment();
 
         // Supply presets
         Bundle args = new Bundle();
         args.putStringArrayList(PRESETS,presetNames);
+        args.putString(PRESET_TYPE,presetType);
+        args.putInt(INDEX,index);
         f.setArguments(args);
 
         return f;
@@ -58,7 +62,9 @@ public class LoadPresetsDialogFragment extends DialogFragment {
 
         lv = (ListView) v.findViewById(R.id.presets_list_view);
 
-        adapter = new LoadPresetsAdapter( getActivity(), getTargetFragment(), getTargetRequestCode(), LOAD_CODE, getArguments().getStringArrayList(PRESETS));
+        adapter = new LoadPresetsAdapter( getActivity(), getTargetFragment(), getTargetRequestCode(),
+                LOAD_CODE, getArguments().getStringArrayList(PRESETS),
+                getArguments().getString(PRESET_TYPE),getArguments().getInt(INDEX));
 
         // set adapter
         lv.setAdapter(adapter);

@@ -10,8 +10,7 @@ import java.util.ArrayList;
 public class Deck {
     private List<Card> cards;
 
-    private static final String[] cardNumbers = {Card.TWO,Card.THREE, Card.FOUR, Card.FIVE, Card.SIX,
-            Card.SEVEN,Card.EIGHT,Card.NINE,Card.TEN, Card.JACK, Card.QUEEN, Card.KING, Card.ACE};
+    private static final int[] cardNumbers = {2,3,4,5,6,7,8,9,10,11,12,13,14};
 
     private static final String[] suits = {Card.SPADES, Card.HEARTS, Card.DIAMONDS, Card.CLUBS};
 
@@ -27,8 +26,10 @@ public class Deck {
     // True for a deck with two jokers, false without
     public Deck(boolean hasJokers){
 
+        cards = new ArrayList<>();
+
         // Construct deck without jokers first
-        for (String number : cardNumbers){
+        for (int number : cardNumbers){
             for (String suit : suits){
                 cards.add(new Card(number,suit));
             }
@@ -56,6 +57,10 @@ public class Deck {
     // Remove card specified
     public void removeCard(Card card){
         cards.remove(card);
+    }
+
+    public int getNumCards(){
+        return cards.size();
     }
 
     // Add card to end of deck

@@ -11,40 +11,37 @@ import android.view.ViewGroup;
 import android.support.annotation.Nullable;
 import android.widget.ImageButton;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 
-/**
- * IntroDialogFragment: Explains how to use the program when first opening
- * Includes a checkmark for users to indicate they are familiar with this dialog and would
- * not like to see it again.
- *
- * This dialog should only show if we have it set in our preferences to show
- */
-
-public class StopTimerDialogFragment extends DialogFragment {
+public class StopDialogFragment extends DialogFragment {
 
     private ImageButton pauseTimer;  // Pause instead of stopping
     private ImageButton stopTimer;  // truly stop
 
     private static final String STOP_DIALOG = "STOP_DIALOG";
+    private static final String WORKOUT_TYPE = "WORKOUT_TYPE";
+
+    private static final String TIMER = "TIMER";
+    private static final String CARDS = "CARDS";
+    private static final String DICE = "DICE";
 
     private static final int PAUSE_CODE = 0;
     private static final int STOP_CODE = 1;
 
     // This allows our activity to refresh the timer fragment
-    public interface OnTimerStopped{
-        public void onTimerStopped();
+    public interface OnWorkoutStopped{
+        public void onWorkoutStopped(String workoutType);
     }
 
     // Empty constructor
-    public StopTimerDialogFragment(){}
+    public StopDialogFragment(){}
 
     // Create a new instance
-    static StopTimerDialogFragment newInstance() {
-        StopTimerDialogFragment f = new StopTimerDialogFragment();
+    static StopDialogFragment newInstance(String workoutType) {
+        StopDialogFragment f = new StopDialogFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
+        args.putString(WORKOUT_TYPE,workoutType);
         f.setArguments(args);
 
         return f;
@@ -110,7 +107,7 @@ public class StopTimerDialogFragment extends DialogFragment {
                 ft.commit();
 
                 // Refresh view
-                ((WorkoutActivity)getActivity()).onTimerStopped();
+                ((WorkoutActivity)getActivity()).onWorkoutStopped(getArguments().getString(WORKOUT_TYPE));
 
             }
         });

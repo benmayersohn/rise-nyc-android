@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/dice_layout_initial"
     tools:context="com.therise.nyc.therisenyc.DiceFragment">
 
     <LinearLayout
@@ -21,7 +22,7 @@
         android:divider="@color/black">
 
         <TextView
-            android:text="@string/cards_dice_instructions"
+            android:text="@string/dice_instructions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
@@ -92,15 +93,14 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center_vertical">
 
-            <Spinner
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/exercise"
+                android:id="@+id/exercise1"
                 android:textAlignment="center"
-                android:spinnerMode="dropdown"
                 android:background="@drawable/rect_border2"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>
@@ -123,7 +123,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/add_exercise"
+                android:id="@+id/save_1"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_save_black_24dp"
                 android:gravity="center_vertical"/>
@@ -186,14 +186,14 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center_vertical">
 
-            <Spinner
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/exercise"
+                android:id="@+id/exercise2"
                 android:textAlignment="center"
                 android:background="@drawable/rect_border2"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>
@@ -216,7 +216,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/add_exercise"
+                android:id="@+id/save_2"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_save_black_24dp"
                 android:gravity="center_vertical"/>
@@ -279,14 +279,14 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center_vertical">
 
-            <Spinner
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/exercise"
+                android:id="@+id/exercise3"
                 android:textAlignment="center"
                 android:background="@drawable/rect_border2"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>
@@ -309,7 +309,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/add_exercise"
+                android:id="@+id/save_3"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_save_black_24dp"
                 android:gravity="center_vertical"/>
@@ -372,14 +372,14 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center_vertical">
 
-            <Spinner
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/exercise"
+                android:id="@+id/exercise4"
                 android:textAlignment="center"
                 android:background="@drawable/rect_border2"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>
@@ -402,7 +402,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/add_exercise"
+                android:id="@+id/save_4"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_save_black_24dp"
                 android:gravity="center_vertical"/>
@@ -465,14 +465,14 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center_vertical">
 
-            <Spinner
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/exercise"
+                android:id="@+id/exercise5"
                 android:textAlignment="center"
                 android:background="@drawable/rect_border2"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>
@@ -495,7 +495,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/add_exercise"
+                android:id="@+id/save_5"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_save_black_24dp"
                 android:gravity="center_vertical"/>
@@ -558,14 +558,14 @@
             android:focusableInTouchMode="true"
             android:layout_gravity="center_vertical">
 
-            <Spinner
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/exercise"
+                android:id="@+id/exercise6"
                 android:textAlignment="center"
                 android:background="@drawable/rect_border2"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>
@@ -588,7 +588,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@id/add_exercise"
+                android:id="@+id/save_6"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_save_black_24dp"
                 android:gravity="center_vertical"/>

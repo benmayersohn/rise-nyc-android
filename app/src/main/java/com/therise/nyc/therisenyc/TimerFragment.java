@@ -1,9 +1,7 @@
 package com.therise.nyc.therisenyc;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +22,7 @@ import android.text.Editable;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.reflect.TypeToken;
 import android.text.TextWatcher;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
@@ -32,6 +31,7 @@ import android.content.Intent;
 
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.lang.reflect.Type;
 import java.util.Locale;
 import com.google.gson.Gson;
 import java.io.InputStreamReader;
@@ -43,33 +43,54 @@ import java.util.Random;
 public class TimerFragment extends Fragment
 implements SavePresetsDialogFragment.UpdatePresets{
 
-    // Possible timer states
-
-    // we're on timer view
     private static final String PRESET_FILE = "timer_presets.json";
+
     private static final String STOP_DIALOG = "STOP_DIALOG";
     private static final String END_DIALOG = "END_DIALOG";
     private static final String LOAD_DIALOG = "LOAD_DIALOG";
     private static final String SAVE_DIALOG = "SAVE_DIALOG";
 
-    private static final String TIMER_INACTIVE = "TIMER_INACTIVE"; // before workout started
-    private static final String TIMER_PAUSED = "TIMER_PAUSED"; // while paused
+    private static final String WORKOUT_TYPE = "TIMER";
 
-    private static final int ONE_SECOND = 1000; // one second in milliseconds
-    private static final int ONE_MINUTE = 60*ONE_SECOND; // one minute in milliseconds
-    private static final int RUNNING_CHECK_INTERVAL = 50; // MUST be multiple of 1000 but LESS
+    // request code for dialog in reference to to this fragment
+    private static final int REQUEST_CODE = 1;
+    private static final String SELECTED_ENTRY = "SELECTED_ENTRY";
+    private static final String DELETE_ENTRY = "DELETE_ENTRY";
+    private static final String CHOSEN_NAME = "CHOSEN_NAME";
 
-    // Start countdown 3 seconds before
-    private static final int COUNTDOWN_BEGIN = 3*ONE_SECOND;
+    // RESULT_CODES
+    private static final int PAUSE_CODE = 0;
+    private static final int STOP_CODE = 1;
+    private static final int LOAD_CODE = 2;
+    private static final int SAVE_CODE = 3;
 
-    private static final int TEN_SECONDS = 10*ONE_SECOND;
-
+    // Possible timer states
     private static final String PREP = "PREP";
     private static final String WORK = "WORK";
     private static final String REST = "REST";
     private static final String BREAK = "BREAK";
 
-    private static final int YEAH_BUDDY_LENGTH = ONE_SECOND;
+    private static final String TIMER_INACTIVE = "TIMER_INACTIVE"; // before workout started
+    private static final String TIMER_PAUSED = "TIMER_PAUSED"; // while paused
+
+    private static final String TEST = "TEST";
+
+    private static final String SET = "Set";
+    private static final String REP = "Rep";
+
+    private static final String PRESET = "PRESET";
+    private static final String EXERCISE = "EXERCISE";
+
+    private static final String BLANK = "BLANK";
+
+    private static final int ONE_SECOND = 1000; // one second in milliseconds
+    private static final int ONE_MINUTE = 60*ONE_SECOND; // one minute in milliseconds
+    private static final int RUNNING_CHECK_INTERVAL = 50; // MUST be factor of 1000
+
+    // Start countdown 3 seconds before
+    private static final int COUNTDOWN_BEGIN = 3*ONE_SECOND;
+
+    private static final int TEN_SECONDS = 10*ONE_SECOND;
 
     // yeah buddies allowed between two segments (for timeLeft - segLowerBound)
     // workLength - ONE_SECOND and restLength + ONE_SECOND
@@ -79,26 +100,15 @@ implements SavePresetsDialogFragment.UpdatePresets{
     private long yeahBuddyLowerBound2;
     private long yeahBuddyUpperBound2;
 
-    // length of time where yeah buddies should not be called
-    private static final long YEAH_BUDDY_BUFFER = 4*ONE_SECOND + COUNTDOWN_BEGIN;
-    private long yeahBuddiesLength;
-
     // Allow two yeah buddies per segment at random intervals
     private final int numYeahBuddiesWork = 2;
-    private final int numYeahBuddiesRest = 1;
     private int numYeahBuddiesPlayedWork = 0;
-    private int numYeahBuddiesPlayedRest = 0;
 
     private Random r = new Random();
     private double probability;
 
     // probability of drawing a "yeah buddy" on each number draw
     private static final double DRAW_PROBABILITY_WORK = 0.1;
-
-    private static final String TEST = "TEST";
-
-    private static final String SET = "Set";
-    private static final String REP = "Rep";
 
     // Size to display number of sets and reps while running (in sp units)
     private static final float SETS_TEXT_SIZE = 30;
@@ -206,16 +216,10 @@ implements SavePresetsDialogFragment.UpdatePresets{
     private volatile boolean mediaPlayerPaused = false;
     private volatile boolean firstRun = true;
 
-    // RESULT_CODES
-    private static final int PAUSE_CODE = 0;
-    private static final int STOP_CODE = 1;
-    private static final int LOAD_CODE = 2;
-    private static final int SAVE_CODE = 3;
-
     // Criterion to end segment
     private long segLowerBound;
 
-    // DialogFragment for when we stop timer
+    // FragmentTransaction for loading dialogs
     private FragmentTransaction ft;
 
     // Create dialogs
@@ -227,7 +231,7 @@ implements SavePresetsDialogFragment.UpdatePresets{
     // For presets (load while setting up UI)
     private Gson gson;
     private TimerPreset timerPreset;
-    private AllTimerPresets presets;
+    private PresetHolder<TimerPreset> presets;
     private JsonReader jsonReader;
     private FileWriter fileWriter;
     private File jsonFile;
@@ -235,13 +239,8 @@ implements SavePresetsDialogFragment.UpdatePresets{
     private MediaPlayer mediaPlayer;
 
     private Handler timerHandler = new Handler(Looper.getMainLooper());
-    private RiseTimer riseTimer = new RiseTimer();
 
-    // request code for dialog in reference to to this fragment
-    private static final int REQUEST_CODE = 12345;
-    private static final String SELECTED_ENTRY = "SELECTED_ENTRY";
-    private static final String DELETE_ENTRY = "DELETE_ENTRY";
-    private static final String CHOSEN_NAME = "CHOSEN_NAME";
+    private RiseTimer riseTimer = new RiseTimer();
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == PAUSE_CODE){
@@ -261,7 +260,7 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
 
             if (deleteEntry){
-                removeFromJson(presets.getPreset(position));
+                JsonTools.removeFromJson(presets,presets.getPreset(position),jsonFile,gson);
             }
             else {
                 // refresh view
@@ -280,7 +279,7 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
             // Write preset
 
-            writeToJson(generateCurrentPreset(presetName));
+            JsonTools.writeToJson(presets,generateCurrentPreset(presetName),jsonFile,gson);
         }
 
 
@@ -334,12 +333,12 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
             // Set time displayed in segment
             if (prepTime != 0) {
-                timeLeftInSegView.setText(millisToTimeString(prepTime));
+                timeLeftInSegView.setText(TimeTools.millisToTimeString(prepTime));
                 timerSegView.setText(PREP);
                 timerSegView.setTextColor(ContextCompat.getColor(getContext(), R.color.prep_color));
                 timeLeftInSegView.setTextColor(ContextCompat.getColor(getContext(), R.color.prep_color));
             } else {
-                timeLeftInSegView.setText(millisToTimeString(workTime));
+                timeLeftInSegView.setText(TimeTools.millisToTimeString(workTime));
                 timerSegView.setText(WORK);
                 timerSegView.setTextColor(ContextCompat.getColor(getContext(), R.color.work_color));
                 timeLeftInSegView.setTextColor(ContextCompat.getColor(getContext(), R.color.work_color));
@@ -359,8 +358,8 @@ implements SavePresetsDialogFragment.UpdatePresets{
                 runningViewSet = true;
             }
 
-            timeElapsedView.setText(millisToTimeString(elapsedTime));
-            timeLeftInSegView.setText(millisToTimeString(timeInSegment));
+            timeElapsedView.setText(TimeTools.millisToTimeString(elapsedTime));
+            timeLeftInSegView.setText(TimeTools.millisToTimeString(timeInSegment));
 
             switch(currSegment){
                 case WORK:
@@ -432,7 +431,7 @@ implements SavePresetsDialogFragment.UpdatePresets{
                     timerState = TIMER_INACTIVE;
 
                     // Create dialog fragment
-                    endFragment = EndTimerDialogFragment.newInstance();
+                    endFragment = EndTimerDialogFragment.newInstance(WORKOUT_TYPE);
                     endFragment.setTargetFragment(getParentFragment(), REQUEST_CODE);
 
                     timerRunning = false;
@@ -462,6 +461,7 @@ implements SavePresetsDialogFragment.UpdatePresets{
                             if (mediaPlayer == null) {
                                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.countdown_and_whistle);
                             }
+
                             else if (!(countdownStarted)){
                                 mediaPlayer.release();
                                 mediaPlayer = null;
@@ -504,6 +504,8 @@ implements SavePresetsDialogFragment.UpdatePresets{
                             if (!(mediaPlayer == null)){
 
                                 if (!(mediaPlayer.isPlaying())) {
+                                    mediaPlayer.release();
+                                    mediaPlayer = null;
                                     mediaPlayer = MediaPlayer.create(getContext(), R.raw.yeah_buddy);
                                     mediaPlayer.start();
                                     numYeahBuddiesPlayedWork++;
@@ -527,7 +529,10 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
                     else{
                         // Otherwise turn off media player
-                        if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+                        if (mediaPlayer != null) {
+                            if (mediaPlayer.isPlaying()){
+                                mediaPlayer.stop();
+                            }
                             mediaPlayer.release();
                             mediaPlayer = null;
                         }
@@ -641,59 +646,11 @@ implements SavePresetsDialogFragment.UpdatePresets{
         return ONE_MINUTE * numMins + ONE_SECOND * numSecs;
     }
 
-    // Take time in milliseconds and convert to "m:ss" format
-    private String millisToTimeString(long millis){
-        // floor of quotient is the number of minutes
-        int numMins = (int) Math.floor(1.0*millis/(1.0*ONE_MINUTE));
-
-        // remainder is seconds
-        int numSecs = (int) Math.floor(1.0*(millis - numMins * ONE_MINUTE)/(1.0*ONE_SECOND));
-
-        String minString = String.valueOf(numMins);
-        String secString = String.format(Locale.US,"%02d",numSecs);
-
-        return minString + ":" + secString;
-    }
-
     // We get the name of the tab and the view from the activity
     public static TimerFragment newInstance() {
         TimerFragment fragment = new TimerFragment();
 
         return fragment;
-    }
-
-    public void writeToJson(TimerPreset p){
-        presets.addPreset(p);
-
-        // save
-        try{
-            // Set up output writer
-            fileWriter = new FileWriter(jsonFile);
-
-            // write
-            gson.toJson(presets,fileWriter);
-
-            // close writer
-            fileWriter.close();
-        }
-        catch(Exception e){}
-    }
-
-    public void removeFromJson(TimerPreset p){
-        presets.removePreset(p);
-
-        // save
-        try{
-            // Set up output writer
-            fileWriter = new FileWriter(jsonFile);
-
-            // write
-            gson.toJson(presets,fileWriter);
-
-            // close writer
-            fileWriter.close();
-        }
-        catch(Exception e){}
     }
 
 
@@ -891,8 +848,6 @@ implements SavePresetsDialogFragment.UpdatePresets{
         yeahBuddyUpperBound2 = restTime - ONE_SECOND;
         yeahBuddyLowerBound2 = COUNTDOWN_BEGIN+ONE_SECOND;
 
-        yeahBuddiesLength = workTime - YEAH_BUDDY_BUFFER;
-
     }
 
     // update number of sets
@@ -974,14 +929,14 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
                 timerSegView.setText(WORK);
                 timerSegView.setTextColor(ContextCompat.getColor(getContext(), R.color.work_color));
-                timeLeftInSegView.setText(millisToTimeString(workTime));
+                timeLeftInSegView.setText(TimeTools.millisToTimeString(workTime));
                 timeLeftInSegView.setTextColor(ContextCompat.getColor(getContext(), R.color.work_color));
             } else {
                 currSegment = PREP; // prep time
 
                 timerSegView.setText(PREP);
                 timerSegView.setTextColor(ContextCompat.getColor(getContext(), R.color.prep_color));
-                timeLeftInSegView.setText(millisToTimeString(prepTime));
+                timeLeftInSegView.setText(TimeTools.millisToTimeString(prepTime));
                 timeLeftInSegView.setTextColor(ContextCompat.getColor(getContext(), R.color.prep_color));
             }
 
@@ -1006,7 +961,7 @@ implements SavePresetsDialogFragment.UpdatePresets{
             // If our prep time is zero, then we display the work time
             // Otherwise view doesn't change
             if (prepTime==0){
-                timeLeftInSegView.setText(millisToTimeString(workTime));
+                timeLeftInSegView.setText(TimeTools.millisToTimeString(workTime));
             }
 
         }
@@ -1077,11 +1032,12 @@ implements SavePresetsDialogFragment.UpdatePresets{
             }
 
             // Load presets via GSON here
-            presets = gson.fromJson(jsonReader, AllTimerPresets.class);
+            Type collectionType = new TypeToken<PresetHolder<TimerPreset>>(){}.getType();
+            presets = gson.fromJson(jsonReader, collectionType);
             if (presets == null){
                 // Generate default
-                presets = new AllTimerPresets();
-                presets.addPreset(new TimerPreset(TEST));
+                presets = new PresetHolder<>();
+                presets.addPreset(new TimerPreset());
             }
             else {
                 timerPreset = presets.getPreset(0); // Set initial view preset as the first in the list
@@ -1295,7 +1251,7 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
 
             // Create dialog fragment
-            stopFragment = StopTimerDialogFragment.newInstance();
+            stopFragment = StopDialogFragment.newInstance(WORKOUT_TYPE);
             stopFragment.setTargetFragment(this, REQUEST_CODE);
 
             // Make "Save Preset" unclickable while we're running
@@ -1311,6 +1267,12 @@ implements SavePresetsDialogFragment.UpdatePresets{
                     // Stop the timer
                     timerRunning = false;
                     timerState = TIMER_PAUSED;
+
+                    if (!(mediaPlayer == null) && mediaPlayer.isPlaying()){
+                        mediaPlayer.pause();
+                        mediaPlayerPaused = true;
+                    }
+
                     timerHandler.removeCallbacks(riseTimer);
 
                     // pause view
@@ -1523,11 +1485,11 @@ implements SavePresetsDialogFragment.UpdatePresets{
         loadPresetButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
 
-                updateLoadFragment();
+                updateLoadFragment(PRESET,-1);
 
                 if (presets.getNumPresets()>0) {
 
-                    // We generates ListView from AllTimerPresets
+                    // We generates ListView from PresetHolder<TimerPreset>
                     ft = getActivity().getSupportFragmentManager().beginTransaction();
 
                     // Show stopFragment
@@ -1545,14 +1507,14 @@ implements SavePresetsDialogFragment.UpdatePresets{
         savePresetButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
 
-                updateSaveFragment();
+                updateSaveFragment(PRESET,BLANK);
 
                 // Generate a dialog with a field to put in name
                 // Once we have the name, we can store, because we already have all the other
                 //
                 // saveCurrentPreset(String name)
 
-                // We generates ListView from AllTimerPresets
+                // We generates ListView from PresetHolder<TimerPreset>
                 ft = getActivity().getSupportFragmentManager().beginTransaction();
 
                 // Show stopFragment
@@ -1574,19 +1536,19 @@ implements SavePresetsDialogFragment.UpdatePresets{
     }
 
     @Override
-    public void updateSaveFragment(){
+    public void updateSaveFragment(String presetType, String typedValue){
         // Create save fragment
         if (!(presets == null)) {
-            savePresetsFragment = SavePresetsDialogFragment.newInstance(presets.getNames());
+            savePresetsFragment = SavePresetsDialogFragment.newInstance(presets.getNames(),WORKOUT_TYPE,presetType,typedValue);
             savePresetsFragment.setTargetFragment(this, REQUEST_CODE);
         }
     }
 
     @Override
-    public void updateLoadFragment(){
+    public void updateLoadFragment(String presetType, int index){
         // Create load fragment
         if (!(presets == null) && presets.getNumPresets()>0) {
-            loadPresetsFragment = LoadPresetsDialogFragment.newInstance(presets.getNames());
+            loadPresetsFragment = LoadPresetsDialogFragment.newInstance(presets.getNames(),presetType,index);
             loadPresetsFragment.setTargetFragment(this, REQUEST_CODE);
         }
     }
