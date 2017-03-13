@@ -5,6 +5,12 @@ package com.therise.nyc.therisenyc;
  */
 
 // A preset at minimum has a getName() method
-public interface Preset {
-    public String getName();
+public abstract class Preset implements Comparable<Preset>{
+
+    public abstract String getName();
+
+    @Override
+    public int compareTo(Preset p2){
+        return this.getName().compareTo(p2.getName());
+    }
 }

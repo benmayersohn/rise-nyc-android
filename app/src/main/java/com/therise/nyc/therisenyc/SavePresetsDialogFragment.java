@@ -32,7 +32,7 @@ import static android.view.View.INVISIBLE;
 
 public class SavePresetsDialogFragment extends DialogFragment {
 
-    private static final String PRESETS = "presets";
+    private static final String PRESETS = "PRESETS";
     private static final String EXERCISE = "EXERCISE";
     private static final String TYPED_NAME = "TYPED_NAME";
     private static final String PRESET_TYPE = "PRESET_TYPE";
@@ -101,7 +101,6 @@ public class SavePresetsDialogFragment extends DialogFragment {
         // Display a simple dialog box
         // Send name we chose back to fragment
 
-
         entryView = (EditText) v.findViewById(R.id.preset_name);
 
         // force all writing to upper-case
@@ -110,6 +109,7 @@ public class SavePresetsDialogFragment extends DialogFragment {
         // Set the text as the current exercise, if we're saving an exercise
         if (getArguments().getString(PRESET_TYPE).equals(EXERCISE)){
             entryView.setText(getArguments().getString(TYPED_NAME));
+            chosenName = entryView.getText().toString();
         }
 
         duplicateWarning = (TextView) v.findViewById(R.id.same_name_warning);

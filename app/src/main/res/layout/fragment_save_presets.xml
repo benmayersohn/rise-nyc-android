@@ -27,13 +27,6 @@
         android:layout_marginBottom="20dp">
     </EditText>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@id/presets_list_view">
-    </ListView>
-
     <Button android:id="@+id/save_preset_button"
         android:layout_width="match_parent"
         android:text="@string/save_preset_button"
@@ -54,5 +47,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@id/presets_list_view">
+    </ListView>
 
 </LinearLayout>

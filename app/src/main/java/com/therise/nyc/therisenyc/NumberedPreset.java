@@ -3,6 +3,7 @@ package com.therise.nyc.therisenyc;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mayerzine on 3/11/17.
@@ -11,20 +12,21 @@ import java.util.ArrayList;
 // Both cards and dice involve "numbered presets", because they're essentially the same thing
 // Exercises are assigned to a suit or number, there are "n" total in different positions
 
-public class NumberedPreset implements Preset {
+
+public class NumberedPreset extends Preset {
 
     @SerializedName("preset_name")
     private String presetName;
 
     @SerializedName("exercises")
-    private ArrayList<String> exercises;
+    private List<String> exercises;
 
     private int numExercises;
 
     public static final String BLANK = "";
     public static final String BLANK_NAME = "EMPTY";
 
-    public NumberedPreset(String presetName, ArrayList<String> exercises){
+    public NumberedPreset(String presetName, List<String> exercises){
         this.presetName = presetName;
         this.exercises = exercises;
         numExercises = exercises.size();
@@ -70,16 +72,8 @@ public class NumberedPreset implements Preset {
         presetName = name;
     }
 
-    public void setExercise(int index, String exercise){
-        exercises.set(index,exercise);
-    }
-
     public String getExercise(int index){
         return exercises.get(index);
-    }
-
-    public int getNumExercises(){
-        return numExercises;
     }
 
 

@@ -2,39 +2,33 @@ package com.therise.nyc.therisenyc;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.media.MediaPlayer;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,26 +54,30 @@ import java.lang.reflect.Type;
 public class DiceFragment extends Fragment
         implements SavePresetsDialogFragment.UpdatePresets{
 
+    // REFRESH FILES (discards saved exercises/presets for defaults)
+    private static final boolean refreshFiles = false;
+
     private static final String PRESETS_FILE = "dice_presets.json";
     private static final String EXERCISES_FILE = "exercises.json";
 
-    private int numRolls; // total number of rolls
-
     private DialogFragment loadPresetsFragment;
     private DialogFragment savePresetsFragment;
-    private DialogFragment stopFragment;
     private DialogFragment endFragment;
 
     private static final String BLANK = "";
+    private volatile boolean mediaPlayerPaused = false;
+    private MediaPlayer mediaPlayer;
 
     // RESULT_CODES
     private static final int STOP_CODE = 1;
     private static final int LOAD_CODE = 2;
     private static final int SAVE_CODE = 3;
 
+    private static final int NUM_ANIMATION_CYCLES = 12;
+    private static final int DICE_ANIMATE_INTERVAL = 50;
+
     private static final String LOAD_DIALOG = "LOAD_DIALOG";
     private static final String SAVE_DIALOG = "SAVE_DIALOG";
-    private static final String STOP_DIALOG = "STOP_DIALOG";
     private static final String END_DIALOG = "END_DIALOG";
     private static final String PRESET = "PRESET";
     private static final String EXERCISE = "EXERCISE";
@@ -96,10 +94,6 @@ public class DiceFragment extends Fragment
 
     private String timerState = TIMER_INACTIVE;
 
-    // delimiters
-    private static final String SPACE_DELIM = " ";
-    private static final String SLASH = "/";
-
     // Time running
     private TextView timeElapsedView;
 
@@ -114,7 +108,6 @@ public class DiceFragment extends Fragment
     // Index of current suit
     private int suitIndex;
 
-    private ImageView leftArrow;
     private ImageView rightArrow;
 
     // Preset name to save
@@ -123,12 +116,10 @@ public class DiceFragment extends Fragment
     // Exercise name to save
     private String exerciseName;
 
-    private LinearLayout buttonRow;
+    private AnimationDrawable frameAnimation;
 
     private volatile boolean timerRunning;
     private volatile boolean runningViewSet;
-    private volatile boolean firstRun = true;
-
     private static final int ONE_SECOND = 1000; // one second in milliseconds
     private static final int RUNNING_CHECK_INTERVAL = 50; // MUST be factor of 1000
 
@@ -144,10 +135,7 @@ public class DiceFragment extends Fragment
     private TextView diceExercise; // current exercise being shown
     private TextView rollNumber; // how many rolls we've thrown
 
-    private boolean hasJokers;
-
     private ImageButton playButton;
-    private ImageButton playButtonDuring;
     private ImageButton stopButton;
     private Button savePresetButton;
     private Button loadPresetButton;
@@ -227,6 +215,12 @@ public class DiceFragment extends Fragment
             // Lastly, here's the key! Run a new handler to make this loop
             // To stop timer, we can simply call timerHandler.removeCallbacks(riseTimer)
             timerHandler.postDelayed(this,RUNNING_CHECK_INTERVAL);
+
+            // If our media player isn't playing, set to null
+            if (mediaPlayer != null && !(mediaPlayer.isPlaying())) {
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
 
         }
     }
@@ -349,7 +343,6 @@ public class DiceFragment extends Fragment
 
         // Save presets
         else if (resultCode == SAVE_CODE){
-            int position = data.getIntExtra(SELECTED_ENTRY, 0);
             String presetType = data.getStringExtra(PRESET_TYPE);
 
             if (presetType.equals(PRESET)) {
@@ -361,7 +354,7 @@ public class DiceFragment extends Fragment
             }
 
             if (presetType.equals(EXERCISE)) {
-                exerciseName = exercises.getPreset(position).getName();
+                exerciseName = data.getStringExtra(CHOSEN_NAME);
 
                 // Write preset
                 jsonFile = new File(getActivity().getExternalFilesDir(null).getPath(), EXERCISES_FILE);
@@ -425,9 +418,10 @@ public class DiceFragment extends Fragment
 
                 jsonReader = new JsonReader(new InputStreamReader(new FileInputStream(jsonFile)));
 
-                // UNCOMMENT ONLY IF YOU WANT TO REFRESH EXTERNAL JSON FILE
-                //jsonFile.delete();
-                // jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(PRESETS_FILE)));
+                if (refreshFiles) {
+                    jsonFile.delete();
+                    jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(PRESETS_FILE)));
+                }
             }
             else{
                 jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(PRESETS_FILE)));
@@ -461,9 +455,10 @@ public class DiceFragment extends Fragment
 
                 jsonReader = new JsonReader(new InputStreamReader(new FileInputStream(jsonFile)));
 
-                // UNCOMMENT ONLY IF YOU WANT TO REFRESH EXTERNAL JSON FILE
-                //jsonFile.delete();
-                // jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(EXERCISES_FILE)));
+                if (refreshFiles) {
+                    jsonFile.delete();
+                    jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(EXERCISES_FILE)));
+                }
             }
             else{
                 jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(EXERCISES_FILE)));
@@ -485,6 +480,10 @@ public class DiceFragment extends Fragment
             jsonReader.close();
         }
         catch(Exception e){e.printStackTrace();}
+
+        // lastly sort
+        exercises.sort();
+        presets.sort();
     }
 
     @Override
@@ -509,6 +508,8 @@ public class DiceFragment extends Fragment
         @Override
         public boolean onLongClick(View view){
 
+            setupJson();
+
             // We want to load the list of exercises
             // We also want to pass the index of the exercise
             updateLoadFragment(EXERCISE, (Integer)view.getTag());
@@ -518,7 +519,6 @@ public class DiceFragment extends Fragment
                 // We generates ListView from PresetHolder<TimerPreset>
                 ft = getActivity().getSupportFragmentManager().beginTransaction();
 
-                // Show stopFragment
                 loadPresetsFragment.show(ft, LOAD_DIALOG);
             }
             else{
@@ -536,6 +536,8 @@ public class DiceFragment extends Fragment
         @Override
         public void onClick(View view){
 
+            setupJson();
+
             updateSaveFragment(EXERCISE,String.valueOf(fields[(Integer)view.getTag()].getText()));
 
             // Generate a dialog with a field to put in name
@@ -545,7 +547,6 @@ public class DiceFragment extends Fragment
 
             ft = getActivity().getSupportFragmentManager().beginTransaction();
 
-            // Show stopFragment
             savePresetsFragment.show(ft, SAVE_DIALOG);
 
 
@@ -594,6 +595,8 @@ public class DiceFragment extends Fragment
         loadPresetButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
 
+                setupJson();
+
                 updateLoadFragment(PRESET,-1);
 
                 if (presets.getNumPresets()>0) {
@@ -616,6 +619,8 @@ public class DiceFragment extends Fragment
 
         savePresetButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
+
+                setupJson();
 
                 updateSaveFragment(PRESET,BLANK);
 
@@ -672,29 +677,6 @@ public class DiceFragment extends Fragment
         return r.nextInt(numFields);
     }
 
-    // Runnable class for updating the UI, run on the main thread
-    private class UpdateScreen implements Runnable{
-        // Update screen for new card
-
-        Card c;
-
-        UpdateScreen(Card c){
-            this.c = c;
-        }
-
-        @Override
-        public void run(){
-            layoutRunning.setBackgroundResource(c.getId());
-
-            // Set exercise display
-            diceExercise.setText(chosenExercises[dieRoll]);
-
-            // Set card number
-            rollNumber.setText(diceNumberString());
-        }
-
-    }
-
     // Create layout for running mode, upon pressing the play button
     private void setRunningView(){
 
@@ -716,7 +698,6 @@ public class DiceFragment extends Fragment
         diceExercise.setText(chosenExercises[dieRoll]);
         rollNumber.setText(diceNumberString());
 
-
         rightArrow = (ImageView) layoutRunning.findViewById(R.id.right_arrow);
 
         rightArrow.setOnClickListener(new View.OnClickListener() {
@@ -725,15 +706,42 @@ public class DiceFragment extends Fragment
 
                   // roll the dice
 
-                  dieRoll = rollDie();
-
                   currentPosition++;
 
-                  // Set corresponding exercise / image
+                  // roll dice
+                  if (mediaPlayer != null) {
+                      mediaPlayer.release();
+                      mediaPlayer = null;
+                  }
+                  mediaPlayer = MediaPlayer.create(getContext(), R.raw.dice_roll);
+                  mediaPlayer.start();
 
+                  // Set Play animation
                   (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
                       @Override
                       public void run() {
+
+                          // Create animator
+                          dieImage.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.dice_animation));
+
+                          // Set to animation, set a delay, then show the die
+                          frameAnimation = (AnimationDrawable) dieImage.getDrawable();
+
+                          // Add images cycling through die
+                          for (int i = 0; i < NUM_ANIMATION_CYCLES; i++){
+                              frameAnimation.addFrame(ContextCompat.getDrawable(getContext(), dieImages[i % numFields]),DICE_ANIMATE_INTERVAL);
+                          }
+
+                          frameAnimation.start();
+                      }
+                  }, RUNNING_CHECK_INTERVAL);
+
+                  // Then, update the rest
+                  (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
+                      @Override
+                      public void run() {
+
+                          dieRoll = rollDie();
 
                           Drawable d = ContextCompat.getDrawable(getContext(), dieImages[dieRoll]);
                           dieImage.setImageDrawable(d);
@@ -744,7 +752,7 @@ public class DiceFragment extends Fragment
                           rollNumber.setText(diceNumberString());
 
                       }
-                  }, RUNNING_CHECK_INTERVAL);
+                  }, DICE_ANIMATE_INTERVAL*NUM_ANIMATION_CYCLES);
 
               }
           });

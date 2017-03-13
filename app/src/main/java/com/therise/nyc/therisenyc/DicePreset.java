@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by mayerzine on 3/10/17.
  */
 
-public class DicePreset extends NumberedPreset implements Preset {
+public class DicePreset extends NumberedPreset  {
 
     // six-sided die
     private static final int numExercises = 6;

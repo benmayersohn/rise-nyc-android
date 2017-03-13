@@ -25,16 +25,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,6 +55,9 @@ import java.lang.reflect.Type;
 
 public class CardsFragment extends Fragment
     implements SavePresetsDialogFragment.UpdatePresets{
+
+    // REFRESH FILES (discards saved exercises/presets for defaults)
+    private static final boolean refreshFiles = false;
 
     private static final String PRESETS_FILE = "cards_presets.json";
     private static final String EXERCISES_FILE = "exercises.json";
@@ -500,7 +499,6 @@ public class CardsFragment extends Fragment
 
         // Save presets
         else if (resultCode == SAVE_CODE){
-            int position = data.getIntExtra(SELECTED_ENTRY, 0);
             String presetType = data.getStringExtra(PRESET_TYPE);
 
             if (presetType.equals(PRESET)) {
@@ -512,7 +510,7 @@ public class CardsFragment extends Fragment
             }
 
             if (presetType.equals(EXERCISE)) {
-                exerciseName = exercises.getPreset(position).getName();
+                exerciseName = data.getStringExtra(CHOSEN_NAME);
 
                 // Write preset
                 jsonFile = new File(getActivity().getExternalFilesDir(null).getPath(), EXERCISES_FILE);
@@ -576,9 +574,10 @@ public class CardsFragment extends Fragment
 
                 jsonReader = new JsonReader(new InputStreamReader(new FileInputStream(jsonFile)));
 
-                // UNCOMMENT ONLY IF YOU WANT TO REFRESH EXTERNAL JSON FILE
-                //jsonFile.delete();
-                // jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(PRESETS_FILE)));
+                if (refreshFiles) {
+                    jsonFile.delete();
+                    jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(PRESETS_FILE)));
+                }
             }
             else{
                 jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(PRESETS_FILE)));
@@ -591,6 +590,7 @@ public class CardsFragment extends Fragment
                 // Generate default
                 presets = new PresetHolder<>();
                 presets.addPreset(new NumberedPreset(numFields));
+
             }
             else {
                 numberedPreset = presets.getPreset(0); // Set initial view preset as the first in the list
@@ -598,6 +598,8 @@ public class CardsFragment extends Fragment
 
             // close reader
             jsonReader.close();
+
+
         }
         catch(Exception e){e.printStackTrace();}
 
@@ -613,8 +615,10 @@ public class CardsFragment extends Fragment
                 jsonReader = new JsonReader(new InputStreamReader(new FileInputStream(jsonFile)));
 
                 // UNCOMMENT ONLY IF YOU WANT TO REFRESH EXTERNAL JSON FILE
-                //jsonFile.delete();
-                // jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(EXERCISES_FILE)));
+                if (refreshFiles) {
+                    jsonFile.delete();
+                    jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(EXERCISES_FILE)));
+                }
             }
             else{
                 jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(EXERCISES_FILE)));
@@ -636,6 +640,10 @@ public class CardsFragment extends Fragment
             jsonReader.close();
         }
         catch(Exception e){e.printStackTrace();}
+
+        // lastly sort
+        exercises.sort();
+        presets.sort();
     }
 
     @Override
@@ -659,6 +667,8 @@ public class CardsFragment extends Fragment
 
             @Override
             public boolean onLongClick(View view){
+
+                setupJson();
 
                 // We want to load the list of exercises
                 // We also want to pass the index of the exercise
@@ -686,6 +696,9 @@ public class CardsFragment extends Fragment
     private class SaveExerciseListener implements View.OnClickListener{
         @Override
         public void onClick(View view){
+
+            // Make sure exercises up to date
+            setupJson();
 
             updateSaveFragment(EXERCISE,String.valueOf(fields[(Integer)view.getTag()].getText()));
 
@@ -745,6 +758,9 @@ public class CardsFragment extends Fragment
         loadPresetButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
 
+                // Reload JSON
+                setupJson();
+
                 updateLoadFragment(PRESET,-1);
 
                 if (presets.getNumPresets()>0) {
@@ -767,6 +783,9 @@ public class CardsFragment extends Fragment
 
         savePresetButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
+
+                // Reload JSON
+                setupJson();
 
                 updateSaveFragment(PRESET,BLANK);
 

@@ -42,7 +42,7 @@
     <string name="left_arrow">Left Arrow</string>
     <string name="right_arrow">Right Arrow</string>
     <string name="save_exercise">SAVE EXERCISE</string>
-    <string name="same_name_warning">There is already a preset with this name. Please choose a different name.</string>
+    <string name="same_name_warning">Name is already being used.\nPlease choose a different name.</string>
     <string name="load_presets_text">Browse Presets</string>
     <string name="load_preset_dialog">Tap to load.\nHold your finger down to delete.</string>
     <string name="save_preset_dialog">Pick a name.\nBelow are the ones you already have stored.</string>

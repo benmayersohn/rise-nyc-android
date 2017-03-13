@@ -6,7 +6,10 @@ package com.therise.nyc.therisenyc;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Exercise implements Preset{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Exercise extends Preset{
 
     // Not doing much with this class so far
 

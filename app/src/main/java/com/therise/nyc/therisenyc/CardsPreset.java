@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by mayerzine on 3/10/17.
  */
 
-public class CardsPreset extends NumberedPreset implements Preset {
+public class CardsPreset extends NumberedPreset {
 
     // four suits
     private static final int numExercises = 4;

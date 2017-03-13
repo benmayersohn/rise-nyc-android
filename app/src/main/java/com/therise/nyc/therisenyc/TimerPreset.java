@@ -7,7 +7,7 @@ package com.therise.nyc.therisenyc;
 import com.google.gson.annotations.SerializedName;
 
 // Preset class for timer, to be converted from JSON file
-public class TimerPreset implements Preset{
+public class TimerPreset extends Preset{
 
     @SerializedName("preset_name")
     public String presetName;

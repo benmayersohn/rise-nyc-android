@@ -9,10 +9,12 @@ package com.therise.nyc.therisenyc;
 // Implements generics so we can define preset holders for any type of preset
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class PresetHolder<T> {
+public class PresetHolder<T>  {
 
-    private ArrayList<T> presets;
+    private List<T> presets;
 
     public PresetHolder(){
         presets = new ArrayList<>();
@@ -45,9 +47,11 @@ public class PresetHolder<T> {
         return true;
     }
 
+
     public T getPreset(int position){
         return presets.get(position);
     }
+
 
     public T getPreset(String name){
         return getPreset(indexOf(name));
@@ -71,25 +75,23 @@ public class PresetHolder<T> {
     }
 
     public void addPreset(int position, T preset) {
+
         presets.add(position, preset);
+
     }
 
     public void addPreset(T preset) {
+
         presets.add(preset);
+
+    }
+
+    // Assume we're dealing with numbered presets and sort
+    public void sort(){
+        Collections.sort((List<Preset>)presets);
     }
 
     // remove preset by position
-    public void removePreset(int position) {
-        presets.remove(position);
-    }
-
-    public void removePreset(String name) {
-        presets.remove(getPreset(name));
-    }
-
-    public int indexOf(Preset preset){
-        return presets.indexOf(preset);
-    }
 
     public int indexOf(String presetName){
         return getNames().indexOf(presetName);

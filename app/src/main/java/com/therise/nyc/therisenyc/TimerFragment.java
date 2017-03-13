@@ -43,6 +43,9 @@ import java.util.Random;
 public class TimerFragment extends Fragment
 implements SavePresetsDialogFragment.UpdatePresets{
 
+    // REFRESH FILES (discards saved exercises/presets for defaults)
+    private static final boolean refreshFiles = false;
+
     private static final String PRESET_FILE = "timer_presets.json";
 
     private static final String STOP_DIALOG = "STOP_DIALOG";
@@ -1023,9 +1026,10 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
                 jsonReader = new JsonReader(new InputStreamReader(new FileInputStream(jsonFile)));
 
-                // UNCOMMENT ONLY IF YOU WANT TO REFRESH EXTERNAL JSON FILE
-                //jsonFile.delete();
-                // jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(PRESET_FILE)));
+                if (refreshFiles) {
+                    jsonFile.delete();
+                    jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(PRESET_FILE)));
+                }
             }
             else{
                 jsonReader = new JsonReader(new InputStreamReader(getActivity().getAssets().open(PRESET_FILE)));
