@@ -68,6 +68,8 @@ public class DiceFragment extends Fragment
     private volatile boolean mediaPlayerPaused = false;
     private MediaPlayer mediaPlayer;
 
+    private static final int MAX_LENGTH = 16;
+
     // RESULT_CODES
     private static final int STOP_CODE = 1;
     private static final int LOAD_CODE = 2;
@@ -106,7 +108,7 @@ public class DiceFragment extends Fragment
     private FragmentTransaction ft;
 
     // Index of current suit
-    private int suitIndex;
+    private int exerciseIndex;
 
     private ImageView rightArrow;
 
@@ -326,7 +328,7 @@ public class DiceFragment extends Fragment
                     JsonTools.removeFromJson(exercises, exercises.getPreset(position), jsonFile, gson);
                 } else {
 
-                    suitIndex = data.getIntExtra(INDEX,0);
+                    exerciseIndex = data.getIntExtra(INDEX,0);
 
                     // refresh view
                     (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
@@ -334,7 +336,7 @@ public class DiceFragment extends Fragment
                         @Override
                         public void run() {
                             // Check our position, update the corresponding EditText
-                            fields[suitIndex].setText(exerciseName);
+                            fields[exerciseIndex].setText(exerciseName);
                         }
                     }, RUNNING_CHECK_INTERVAL);
                 }
@@ -583,8 +585,8 @@ public class DiceFragment extends Fragment
 
             saveButtons[i].setOnClickListener(new SaveExerciseListener());
 
-            // Force all caps when entering
-            fields[i].setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+            // Force all caps when entering, and max length of characters
+            fields[i].setFilters(new InputFilter[] {new InputFilter.AllCaps(),new InputFilter.LengthFilter(MAX_LENGTH)});
         }
 
         // We want to set a long click listener on the edit text fields, which should load the

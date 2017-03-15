@@ -80,6 +80,8 @@ public class CardsFragment extends Fragment
     private static final int LOAD_CODE = 2;
     private static final int SAVE_CODE = 3;
 
+    private static final int MAX_LENGTH = 16;
+
     private static final String LOAD_DIALOG = "LOAD_DIALOG";
     private static final String SAVE_DIALOG = "SAVE_DIALOG";
     private static final String STOP_DIALOG = "STOP_DIALOG";
@@ -746,8 +748,8 @@ public class CardsFragment extends Fragment
 
             saveButtons[i].setOnClickListener(new SaveExerciseListener());
 
-            // Force all caps when entering
-            fields[i].setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+            // Force all caps when entering, and max length of characters
+            fields[i].setFilters(new InputFilter[] {new InputFilter.AllCaps(),new InputFilter.LengthFilter(MAX_LENGTH)});
         }
 
         // We want to set a long click listener on the edit text fields, which should load the
