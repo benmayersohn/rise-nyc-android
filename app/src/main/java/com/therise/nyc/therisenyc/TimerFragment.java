@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.InputFilter;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,10 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
     private static final String WORKOUT_TYPE = "TIMER";
 
+    private static final int ONE_CHAR = 1;
+    private static final int MAX_SETS_LENGTH = 4;
+    private static final int MAX_REPS_LENGTH = 4;
+
     // request code for dialog in reference to to this fragment
     private static final int REQUEST_CODE = 1;
     private static final String SELECTED_ENTRY = "SELECTED_ENTRY";
@@ -92,6 +97,8 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
     // Start countdown 3 seconds before
     private static final int COUNTDOWN_BEGIN = 3*ONE_SECOND;
+
+    public static final String ZERO = "0";
 
     private static final int TEN_SECONDS = 10*ONE_SECOND;
 
@@ -315,18 +322,41 @@ implements SavePresetsDialogFragment.UpdatePresets{
             // Fill in UI fields from preset
             editReps.setText(String.valueOf(timerPreset.getNumReps()));
             editSets.setText(String.valueOf(timerPreset.getNumSets()));
+
+            // Max of 9999 reps/sets (too many numbers will break the app bc of limit on
+            // size of integers)
+
+            editReps.setFilters(new InputFilter[] {new InputFilter.LengthFilter(MAX_REPS_LENGTH)});
+            editSets.setFilters(new InputFilter[] {new InputFilter.LengthFilter(MAX_SETS_LENGTH)});
+
+
             workTimeMins.setText(String.valueOf(timerPreset.getNumWorkMins()));
             workTimeSecsOnes.setText(String.valueOf(timerPreset.getNumWorkSecsOnes()));
             workTimeSecsTens.setText(String.valueOf(timerPreset.getNumWorkSecsTens()));
+            workTimeMins.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+            workTimeSecsTens.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+            workTimeSecsOnes.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+
             restTimeMins.setText(String.valueOf(timerPreset.getNumRestMins()));
             restTimeSecsOnes.setText(String.valueOf(timerPreset.getNumRestSecsOnes()));
             restTimeSecsTens.setText(String.valueOf(timerPreset.getNumRestSecsTens()));
+            restTimeMins.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+            restTimeSecsTens.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+            restTimeSecsOnes.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+            
             prepTimeMins.setText(String.valueOf(timerPreset.getNumPrepMins()));
             prepTimeSecsOnes.setText(String.valueOf(timerPreset.getNumPrepSecsOnes()));
             prepTimeSecsTens.setText(String.valueOf(timerPreset.getNumPrepSecsTens()));
+            prepTimeMins.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+            prepTimeSecsTens.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+            prepTimeSecsOnes.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+            
             breakTimeMins.setText(String.valueOf(timerPreset.getNumBreakMins()));
             breakTimeSecsOnes.setText(String.valueOf(timerPreset.getNumBreakSecsOnes()));
             breakTimeSecsTens.setText(String.valueOf(timerPreset.getNumBreakSecsTens()));
+            breakTimeMins.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+            breakTimeSecsTens.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
+            breakTimeSecsOnes.setFilters(new InputFilter[] {new InputFilter.LengthFilter(ONE_CHAR)});
 
             // update stored fields
             updateWork();
@@ -1119,6 +1149,18 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
     }
 
+    private void formatEditText(EditText e){
+        // Disable editing of text when we're running
+        e.setInputType(InputType.TYPE_NULL);
+        e.setFocusable(false);
+        e.setClickable(false);
+
+        // if blank set entries to zero
+        if (e.getText().length()==0){
+            e.setText(ZERO);
+        }
+    }
+
     // Create layout for running mode
     private void setRunningView(){
 
@@ -1141,54 +1183,22 @@ implements SavePresetsDialogFragment.UpdatePresets{
                 row3Grid1.setGravity(Gravity.BOTTOM);
                 row3Grid2.setGravity(Gravity.BOTTOM);
 
-                // Disable editing of text when we're running
-                workTimeMins.setInputType(InputType.TYPE_NULL);
-                workTimeMins.setFocusable(false);
-                workTimeMins.setClickable(false);
+                // Format edit text fields for running view
+                formatEditText(workTimeMins);
+                formatEditText(workTimeSecsOnes);
+                formatEditText(workTimeSecsTens);
 
-                workTimeSecsOnes.setInputType(InputType.TYPE_NULL);
-                workTimeSecsOnes.setFocusable(false);
-                workTimeSecsOnes.setClickable(false);
+                formatEditText(restTimeMins);
+                formatEditText(restTimeSecsOnes);
+                formatEditText(restTimeSecsTens);
 
-                workTimeSecsTens.setInputType(InputType.TYPE_NULL);
-                workTimeSecsTens.setFocusable(false);
-                workTimeSecsTens.setClickable(false);
+                formatEditText(prepTimeMins);
+                formatEditText(prepTimeSecsOnes);
+                formatEditText(prepTimeSecsTens);
 
-                restTimeMins.setInputType(InputType.TYPE_NULL);
-                restTimeMins.setFocusable(false);
-                restTimeMins.setClickable(false);
-
-                restTimeSecsOnes.setInputType(InputType.TYPE_NULL);
-                restTimeSecsOnes.setFocusable(false);
-                restTimeSecsOnes.setClickable(false);
-
-                restTimeSecsTens.setInputType(InputType.TYPE_NULL);
-                restTimeSecsTens.setFocusable(false);
-                restTimeSecsTens.setClickable(false);
-
-                prepTimeMins.setInputType(InputType.TYPE_NULL);
-                prepTimeMins.setFocusable(false);
-                prepTimeMins.setClickable(false);
-
-                prepTimeSecsOnes.setInputType(InputType.TYPE_NULL);
-                prepTimeSecsOnes.setFocusable(false);
-                prepTimeSecsOnes.setClickable(false);
-
-                prepTimeSecsTens.setInputType(InputType.TYPE_NULL);
-                prepTimeSecsTens.setFocusable(false);
-                prepTimeSecsTens.setClickable(false);
-
-                breakTimeMins.setInputType(InputType.TYPE_NULL);
-                breakTimeMins.setFocusable(false);
-                breakTimeMins.setClickable(false);
-
-                breakTimeSecsOnes.setInputType(InputType.TYPE_NULL);
-                breakTimeSecsOnes.setFocusable(false);
-                breakTimeSecsOnes.setClickable(false);
-
-                breakTimeSecsTens.setInputType(InputType.TYPE_NULL);
-                breakTimeSecsTens.setFocusable(false);
-                breakTimeSecsTens.setClickable(false);
+                formatEditText(breakTimeMins);
+                formatEditText(breakTimeSecsOnes);
+                formatEditText(breakTimeSecsTens);
 
                 // get rid of editreps and editsets
 
@@ -1480,6 +1490,11 @@ implements SavePresetsDialogFragment.UpdatePresets{
         // Start timer when we click play
         playButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
+
+                // MAKE SURE NO FIELDS ARE BLANK
+
+
+
                 startTimer();
             }
         });
