@@ -12,6 +12,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,7 +35,6 @@ import android.content.Intent;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
-import java.util.Locale;
 import com.google.gson.Gson;
 import java.io.InputStreamReader;
 import java.io.File;
@@ -60,6 +61,8 @@ implements SavePresetsDialogFragment.UpdatePresets{
     private static final int MAX_SETS_LENGTH = 4;
     private static final int MAX_REPS_LENGTH = 4;
 
+    private static final String TIMER_ISSUE_DIALOG = "TIMER_ISSUE_DIALOG";
+
     // request code for dialog in reference to to this fragment
     private static final int REQUEST_CODE = 1;
     private static final String SELECTED_ENTRY = "SELECTED_ENTRY";
@@ -81,18 +84,18 @@ implements SavePresetsDialogFragment.UpdatePresets{
     private static final String TIMER_INACTIVE = "TIMER_INACTIVE"; // before workout started
     private static final String TIMER_PAUSED = "TIMER_PAUSED"; // while paused
 
-    private static final String TEST = "TEST";
-
     private static final String SET = "Set";
     private static final String REP = "Rep";
 
     private static final String PRESET = "PRESET";
-    private static final String EXERCISE = "EXERCISE";
+
+    private TimerIssueDialogFragment timerIssueFragment;
 
     private static final String BLANK = "BLANK";
 
     private static final int ONE_SECOND = 1000; // one second in milliseconds
     private static final int ONE_MINUTE = 60*ONE_SECOND; // one minute in milliseconds
+    private static final int FIVE_SECONDS = 5*ONE_SECOND;
     private static final int RUNNING_CHECK_INTERVAL = 50; // MUST be factor of 1000
 
     // Start countdown 3 seconds before
@@ -226,6 +229,10 @@ implements SavePresetsDialogFragment.UpdatePresets{
     private volatile boolean mediaPlayerPaused = false;
     private volatile boolean firstRun = true;
 
+    // Do we want to have the countdown chimes?
+    private boolean countdownOn = false;
+    private CheckBox countdownOnBox;
+
     // Criterion to end segment
     private long segLowerBound;
 
@@ -291,7 +298,6 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
             JsonTools.writeToJson(presets,generateCurrentPreset(presetName),jsonFile,gson);
         }
-
 
     }
 
@@ -445,7 +451,9 @@ implements SavePresetsDialogFragment.UpdatePresets{
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.whistle);
                 mediaPlayer.start();
 
-                firstRun = false;
+                // update sets/reps
+                currRep++;
+                currSet++;
             }
 
             // resume media player if we paused earlier
@@ -463,49 +471,59 @@ implements SavePresetsDialogFragment.UpdatePresets{
                     timerRunning = false;
                     timerState = TIMER_INACTIVE;
 
+                    // If we didn't have a countdown, make sure we play the final timer sound
+                    if (!countdownOn){
+                        if (mediaPlayer != null) {
+                            mediaPlayer.release();
+                            mediaPlayer = null;
+                        }
+                        mediaPlayer = MediaPlayer.create(getContext(), R.raw.whistle);
+                        mediaPlayer.start();
+                    }
+
+                    // pause view
+                    (new Handler(Looper.getMainLooper())).postDelayed(new Runnable(){
+                        @Override
+                        public void run(){
+                            setPausedView();
+                        }
+                    },RUNNING_CHECK_INTERVAL);
+
                     // Create dialog fragment
                     endFragment = EndTimerDialogFragment.newInstance(WORKOUT_TYPE);
                     endFragment.setTargetFragment(getParentFragment(), REQUEST_CODE);
 
-                    timerRunning = false;
-                    timerState = TIMER_INACTIVE;
-
                     ft = getActivity().getSupportFragmentManager().beginTransaction();
 
-                    // Show stopFragment
+                    // Show endFragment
                     endFragment.show(ft, END_DIALOG);
                 }
 
                 // onTick, update #AllTheThings
 
-                else if (timeLeft % ONE_SECOND == 0) {
-
-                    // Are we playing a sound?
+                else if (timeLeft % ONE_SECOND == 0 ) {
 
                     // We start our countdown three seconds before the transition
 
                     // probability of playing a "yeah buddy!" clip
                     probability = r.nextDouble();
 
-                    if (timeLeft - segLowerBound <= COUNTDOWN_BEGIN){
+                    if ((timeLeft - segLowerBound > 0 && timeLeft - segLowerBound <= COUNTDOWN_BEGIN) && countdownOn){
 
-                        if (timeLeft > segLowerBound) {
-
-                            if (mediaPlayer == null) {
-                                mediaPlayer = MediaPlayer.create(getContext(), R.raw.countdown_and_whistle);
-                            }
-
-                            else if (!(countdownStarted)){
-                                mediaPlayer.release();
-                                mediaPlayer = null;
-                                mediaPlayer = MediaPlayer.create(getContext(), R.raw.countdown_and_whistle);
-                            }
-
-                            if (!countdownStarted) {
-                                mediaPlayer.start();
-                                countdownStarted = true;
-                            }
+                        if (mediaPlayer == null) {
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.countdown_and_whistle);
                         }
+                        else if (!(countdownStarted)) {
+                            mediaPlayer.release();
+                            mediaPlayer = null;
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.countdown_and_whistle);
+                        }
+
+                        if (!countdownStarted) {
+                            mediaPlayer.start();
+                            countdownStarted = true;
+                        }
+
                     }
 
                     else if (timeLeft - segLowerBound == TEN_SECONDS && (currSegment.equals(WORK) || currSegment.equals(BREAK))){
@@ -561,25 +579,40 @@ implements SavePresetsDialogFragment.UpdatePresets{
                     }
 
                     else{
-                        // Otherwise turn off media player
+                        // Otherwise release media player if not playing
                         if (mediaPlayer != null) {
-                            if (mediaPlayer.isPlaying()){
-                                mediaPlayer.stop();
+                            if (!mediaPlayer.isPlaying()) {
+                                mediaPlayer.release();
+                                mediaPlayer = null;
                             }
-                            mediaPlayer.release();
-                            mediaPlayer = null;
                         }
 
                         // no countdown
-                        countdownStarted = false;
+                        if (countdownStarted) {
+                            countdownStarted = false;
+                        }
                     }
 
-                    // update variables
-                    elapsedTime += ONE_SECOND;
+                    // Update time in segment
                     timeInSegment -= ONE_SECOND;
 
-                    // Move on to new segment
-                    if (timeLeft <= segLowerBound) {
+                    // Move on to new segment if no time left
+                    if (timeInSegment <= 0) {
+
+                        // If our countdown is not on, just play whistle
+                        if (!countdownOn){
+                            if (mediaPlayer != null) {
+
+                                if (mediaPlayer.isPlaying()){
+                                    mediaPlayer.stop();
+                                }
+
+                                mediaPlayer.release();
+                                mediaPlayer = null;
+                            }
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.whistle);
+                            mediaPlayer.start();
+                        }
 
                         // Reset "yeah buddy" counter
                         numYeahBuddiesPlayedWork = 0;
@@ -600,21 +633,44 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
                                 // We either switch to REST or BREAK
                                 if (currRep == numReps) {
-                                    currSegment = BREAK;
-                                    segLowerBound -= breakTime;
-                                    timeInSegment = breakTime;
 
-                                    // We're now on rep 0 (i.e. havent started)
-                                    currRep = 0;
-                                    break;
+                                    if (breakTime>0) {
+                                        currSegment = BREAK;
+                                        segLowerBound -= breakTime;
+                                        timeInSegment = breakTime;
+
+                                        // We're now on rep 0 (i.e. havent started)
+                                        currRep = 0;
+                                        break;
+                                    }
+
+                                    // Otherwise, go back to work
+                                    // make the current rep 1
+                                    else{
+                                        if (currSet != numSets){
+                                            segLowerBound -= workTime;
+                                            timeInSegment = workTime;
+                                            currRep = 1;
+                                            currSet++;
+                                            break;
+                                        }
+                                    }
                                 }
 
-                                // Otherwise we're switching to REST
-                                currSegment = REST;
-                                timeInSegment = restTime;
-                                segLowerBound -= restTime;
+                                // Otherwise we're switching to REST if restTime>0
+                                if (restTime>0) {
+                                    currSegment = REST;
+                                    timeInSegment = restTime;
+                                    segLowerBound -= restTime;
 
-                                break;
+                                    break;
+                                }
+                                else{
+                                    segLowerBound -= workTime;
+                                    timeInSegment = workTime;
+                                    currRep++;
+                                    break;
+                                }
 
                             case REST:
 
@@ -644,6 +700,9 @@ implements SavePresetsDialogFragment.UpdatePresets{
                         }
                     }
 
+                    // update elapsed time
+                    elapsedTime += ONE_SECOND;
+
                     // Now update views based on new information
                     (new Handler(Looper.getMainLooper())).postDelayed(new RiseTimerViewUpdate(),RUNNING_CHECK_INTERVAL);
 
@@ -658,6 +717,11 @@ implements SavePresetsDialogFragment.UpdatePresets{
                 // Lastly, here's the key! Run a new handler to make this loop
                 // To stop timer, we can simply call timerHandler.removeCallbacks(riseTimer)
                 timerHandler.postDelayed(this,RUNNING_CHECK_INTERVAL);
+
+            }
+
+            if (firstRun){
+                firstRun = false;
             }
 
         // end of run method for RiseTimer
@@ -1411,6 +1475,18 @@ implements SavePresetsDialogFragment.UpdatePresets{
         timeElapsedView = (TextView) row1Grid2.getChildAt(0);
         timerSegView = (TextView) row1Grid3.getChildAt(0);
 
+        countdownOnBox = (CheckBox)layout.findViewById(R.id.countdown_checkbox);
+        countdownOn = countdownOnBox.isChecked();
+
+        countdownOnBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+                countdownOn = isChecked;
+            }
+
+        });
+
         // Specific vals
         editSets = (EditText)row3Grid1.getChildAt(0);
         editReps = (EditText)row3Grid2.getChildAt(0);
@@ -1487,15 +1563,33 @@ implements SavePresetsDialogFragment.UpdatePresets{
         loadPresetButton = (Button) row2Grid2.getChildAt(0);
         savePresetButton = (Button) row2Grid3.getChildAt(0);
 
+        // Create fragment that pops up if our workout is invalid
+        timerIssueFragment = TimerIssueDialogFragment.newInstance();
+        timerIssueFragment.setTargetFragment(getParentFragment(), REQUEST_CODE);
+
         // Start timer when we click play
         playButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
 
-                // MAKE SURE NO FIELDS ARE BLANK
+                // We only start if certain conditions are met
+                // 1) Work must be at least 5 seconds
+                // 2) Prep, Rest and Break must either be set to 0 or made greater than or equal to 5 seconds
 
+                if (workTime < FIVE_SECONDS
+                        || (prepTime > 0 && prepTime < FIVE_SECONDS)
+                        || (restTime > 0 && restTime < FIVE_SECONDS)
+                        || (breakTime > 0 && breakTime < FIVE_SECONDS)
+                        ) {
+                    ft = getActivity().getSupportFragmentManager().beginTransaction();
 
-
-                startTimer();
+                    // Show timerIssueFragment
+                    timerIssueFragment.show(ft, TIMER_ISSUE_DIALOG);
+                }
+                else{
+                    // Disable checkbox
+                    countdownOnBox.setEnabled(false);
+                    startTimer();
+                }
             }
         });
 

@@ -1,5 +1,6 @@
 package com.therise.nyc.therisenyc;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -13,35 +14,21 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
-public class EndTimerDialogFragment extends DialogFragment {
+public class TimerIssueDialogFragment extends DialogFragment {
 
     private Button okay;  // end workout
 
-    private static final String END_DIALOG = "END_DIALOG";
-    private static final String WORKOUT_TYPE = "WORKOUT_TYPE";
-
-    private static final String TIMER = "TIMER";
-    private static final String CARDS = "CARDS";
-    private static final String DICE = "DICE";
-
-    private static final int STOP_CODE = 1;
-
-
-    // This allows our activity to refresh the timer fragment
-    public interface OnTimerEnded{
-        void onTimerEnded(String workoutType);
-    }
+    private static final String TIMER_ISSUE_DIALOG = "TIMER_ISSUE_DIALOG";
 
     // Empty constructor
-    public EndTimerDialogFragment(){}
+    public TimerIssueDialogFragment(){}
 
     // Create a new instance
-    static EndTimerDialogFragment newInstance(String workoutType) {
-        EndTimerDialogFragment f = new EndTimerDialogFragment();
+    static TimerIssueDialogFragment newInstance() {
+        TimerIssueDialogFragment f = new TimerIssueDialogFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putString(WORKOUT_TYPE,workoutType);
         f.setArguments(args);
 
         return f;
@@ -59,7 +46,7 @@ public class EndTimerDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_dialog_ended, container, false);
+        View v = inflater.inflate(R.layout.fragment_timer_issue, container, false);
 
         return v;
     }
@@ -80,17 +67,27 @@ public class EndTimerDialogFragment extends DialogFragment {
                 // Close fragment
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.remove(fm.findFragmentByTag(END_DIALOG));
+                ft.remove(fm.findFragmentByTag(TIMER_ISSUE_DIALOG));
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                 ft.commit();
-
-                // Refresh view
-                ((WorkoutActivity)getActivity()).onTimerEnded(getArguments().getString(WORKOUT_TYPE));
 
             }
         });
 
 
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null)
+        {
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setLayout(width, height);
+        }
     }
 
 }

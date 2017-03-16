@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rect_border4"
+    tools:context="com.therise.nyc.therisenyc.TimerIssueDialogFragment">
+
+    <TextView android:id="@+id/timer_issue_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/timer_message_heading"
+        android:layout_marginTop="30dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:gravity = "center_horizontal"
+        />
+
+    <TextView android:id="@+id/timer_issue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/timer_message"
+        android:layout_marginTop="30dp"
+        android:textSize="15sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/black"
+        android:gravity = "start"
+        />
+
+    <Button
+        android:text="@string/okay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/okay_button"
+        android:layout_margin="30dp"
+        android:background="@color/black"
+        android:textColor="@color/white"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

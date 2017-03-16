@@ -29,7 +29,7 @@ public class StopDialogFragment extends DialogFragment {
 
     // This allows our activity to refresh the timer fragment
     public interface OnWorkoutStopped{
-        public void onWorkoutStopped(String workoutType);
+        void onWorkoutStopped(String workoutType);
     }
 
     // Empty constructor

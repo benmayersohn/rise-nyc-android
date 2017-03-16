@@ -80,7 +80,15 @@
     <string name="time_elapsed">0:00</string>
     <string name="stop_dialog">Would you like to PAUSE or STOP the workout?\nThe workout will reset if you stop it.</string>
     <string name="colon">:</string>
+    <string name="countdown_chimes_on">Countdown chimes</string>
     <string name="prep">PREP</string>
+    <string name="timer_message_heading">Something is wrong!</string>
+    <string name="timer_message">Make sure:\n\n
+        1) Work is at least 5 seconds in length (0:05)\n\n
+        2) Rest, Break, and Prep are either\n\n
+        (i) turned off (that is, 0:00)\n
+        (ii) at least 5 seconds in length (0:05)
+    </string>
     <string name="rest">REST</string>
     <string name="play_desc">Press play to begin workout</string>
     <string name="work">WORK</string>
