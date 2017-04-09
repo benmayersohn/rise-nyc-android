@@ -25,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.google.gson.Gson;
@@ -80,7 +82,7 @@ public class CardsFragment extends Fragment
     private static final int LOAD_CODE = 2;
     private static final int SAVE_CODE = 3;
 
-    private static final int MAX_LENGTH = 16;
+    private static final int MAX_LENGTH = 17;
 
     private static final String LOAD_DIALOG = "LOAD_DIALOG";
     private static final String SAVE_DIALOG = "SAVE_DIALOG";
@@ -524,23 +526,17 @@ public class CardsFragment extends Fragment
     }
 
     public NumberedPreset generateCurrentPreset(String name){
-        return new NumberedPreset(name,exercises.getNames());
+        List<String> exerciseNames = new ArrayList<>();
+
+        for (int i = 0; i < numFields; i++) {
+            exerciseNames.add(fields[i].getText().toString());
+        }
+
+        return new NumberedPreset(name,exerciseNames);
     }
 
     public Exercise generateCurrentExercise(String name){
         return new Exercise(name);
-    }
-
-    public void addPreset(String name, int position){
-        presets.addPreset(position, generateCurrentPreset(name));
-    }
-
-    public void setPreset(String name, int position){
-        presets.setPreset(position, generateCurrentPreset(name));
-    }
-
-    public void addPreset(String name){
-        presets.addPreset(generateCurrentPreset(name));
     }
 
     public void insertPreset(String name){

@@ -26,7 +26,6 @@ public class EndTimerDialogFragment extends DialogFragment {
 
     private static final int STOP_CODE = 1;
 
-
     // This allows our activity to refresh the timer fragment
     public interface OnTimerEnded{
         void onTimerEnded(String workoutType);
@@ -76,6 +75,13 @@ public class EndTimerDialogFragment extends DialogFragment {
         okay.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick (View v){
+
+                // Tell fragment to stop workout
+                // For the timer, don't run this; for the cards and dice, run
+
+                if (!(getArguments().getString(WORKOUT_TYPE).equals(TIMER))) {
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), STOP_CODE, new Intent());
+                }
 
                 // Close fragment
                 FragmentManager fm = getFragmentManager();

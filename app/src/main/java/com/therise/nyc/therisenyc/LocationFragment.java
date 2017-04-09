@@ -57,11 +57,9 @@ public class LocationFragment extends Fragment {
         }
     };
 
-
     // We'll assign these on creation
     private String tabName=null;
     private String viewType=null;
-
 
     // DB stuff
     private LocationDatabaseHelper repo;
@@ -268,8 +266,6 @@ public class LocationFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-
     }
 
     @Override

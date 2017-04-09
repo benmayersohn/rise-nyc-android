@@ -88,42 +88,42 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width = "match_parent"
-        android:layout_weight="1.5"
-        android:orientation="horizontal"
+        android:id="@+id/row3"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:weightSum="3"
         android:layout_gravity="center"
+        android:layout_weight="1.5"
         android:gravity="center_horizontal"
-        android:id="@+id/row3">
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <ImageButton
+            android:id="@+id/stop_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_weight=".5"
-            android:contentDescription="@string/stop"
-            android:background="@drawable/rect_border4"
-            android:src="@drawable/ic_stop_black_24dp"
-            android:scaleType="fitCenter"
             android:layout_gravity="center_vertical"
-            android:id="@+id/stop_button"
             android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:layout_weight=".5"
+            android:background="@drawable/rect_border4"
+            android:contentDescription="@string/stop"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_stop_black_24dp" />
 
         <TextView
-            android:text="@string/time_elapsed"
-            android:layout_width="wrap_content"
-            android:layout_weight=".5"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:id="@+id/dice_time_elapsed"
-            android:textSize="25sp"
-            android:textColor="@color/white"
-            android:textStyle="normal|bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_weight=".5"
+            android:background="@drawable/rect_border3"
             android:gravity="center"
-            android:background="@drawable/rect_border3" />
+            android:text="@string/time_elapsed"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="normal|bold" />
 
     </LinearLayout>
 

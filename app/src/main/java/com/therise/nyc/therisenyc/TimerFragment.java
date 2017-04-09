@@ -309,18 +309,6 @@ implements SavePresetsDialogFragment.UpdatePresets{
                 breakMins,breakSecsTens,breakSecsOnes);
     }
 
-    public void addPreset(String name, int position){
-        presets.addPreset(position, generateCurrentPreset(name));
-    }
-
-    public void setPreset(String name, int position){
-        presets.setPreset(position, generateCurrentPreset(name));
-    }
-
-    public void addPreset(String name){
-        presets.addPreset(generateCurrentPreset(name));
-    }
-
     public void insertPreset(String name){
         if (presets != null) {
             timerPreset = presets.getPreset(name);
@@ -334,7 +322,6 @@ implements SavePresetsDialogFragment.UpdatePresets{
 
             editReps.setFilters(new InputFilter[] {new InputFilter.LengthFilter(MAX_REPS_LENGTH)});
             editSets.setFilters(new InputFilter[] {new InputFilter.LengthFilter(MAX_SETS_LENGTH)});
-
 
             workTimeMins.setText(String.valueOf(timerPreset.getNumWorkMins()));
             workTimeSecsOnes.setText(String.valueOf(timerPreset.getNumWorkSecsOnes()));
@@ -1117,7 +1104,6 @@ implements SavePresetsDialogFragment.UpdatePresets{
             jsonFile = new File(getActivity().getExternalFilesDir(null).getPath(), PRESET_FILE);
 
             if (jsonFile.exists()){
-
                 jsonReader = new JsonReader(new InputStreamReader(new FileInputStream(jsonFile)));
 
                 if (refreshFiles) {
@@ -1175,24 +1161,24 @@ implements SavePresetsDialogFragment.UpdatePresets{
     @Override
     public void onPause() {
 
-        // pause mode
-        // pause the timer
+        // pause the timer (if it's running)
 
-        timerRunning = false;
-        timerState = TIMER_PAUSED;
-        timerHandler.removeCallbacks(riseTimer);
-        (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setPausedView();
+        if (timerRunning) {
+            timerRunning = false;
+            timerState = TIMER_PAUSED;
+            timerHandler.removeCallbacks(riseTimer);
+            (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setPausedView();
+                }
+            }, RUNNING_CHECK_INTERVAL);
+
+            if (!(mediaPlayer == null) && mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+                mediaPlayerPaused = true;
             }
-        }, RUNNING_CHECK_INTERVAL);
-
-        if (!(mediaPlayer == null) && mediaPlayer.isPlaying()){
-            mediaPlayer.pause();
-            mediaPlayerPaused = true;
         }
-
 
         super.onPause();
 
@@ -1613,7 +1599,6 @@ implements SavePresetsDialogFragment.UpdatePresets{
                     toast.show();
 
                 }
-
 
             }});
 
