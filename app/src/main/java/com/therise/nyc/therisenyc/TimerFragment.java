@@ -1565,6 +1565,7 @@ implements SavePresetsDialogFragment.UpdatePresets{
                         || (prepTime > 0 && prepTime < FIVE_SECONDS)
                         || (restTime > 0 && restTime < FIVE_SECONDS)
                         || (breakTime > 0 && breakTime < FIVE_SECONDS)
+                        || (numReps == 0) || (numSets == 0)
                         ) {
                     ft = getActivity().getSupportFragmentManager().beginTransaction();
 
