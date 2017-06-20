@@ -1,0 +1,57 @@
+{
+  "presets":
+  [
+  	{
+		"preset_name": "TEST",
+		"num_reps": 2,
+		"num_sets": 2,
+		"num_work_mins": 0,
+		"num_work_secs_tens": 0,
+		"num_work_secs_ones": 5,
+		"num_rest_mins": 0,
+		"num_rest_secs_tens": 0,
+		"num_rest_secs_ones": 5,
+		"num_prep_mins": 0,
+		"num_prep_secs_tens": 0,
+		"num_prep_secs_ones": 5,
+		"num_break_mins": 0,
+		"num_break_secs_tens": 0,
+		"num_break_secs_ones": 5
+  },
+  {
+  	"preset_name": "MONDAY HIIT",
+  	"num_reps": 8,
+  	"num_sets": 7,
+  	"num_work_mins": 0,
+  	"num_work_secs_tens": 2,
+  	"num_work_secs_ones": 0,
+  	"num_rest_mins": 0,
+  	"num_rest_secs_tens": 1,
+  	"num_rest_secs_ones": 0,
+  	"num_prep_mins": 0,
+  	"num_prep_secs_tens": 1,
+  	"num_prep_secs_ones": 0,
+  	"num_break_mins": 0,
+  	"num_break_secs_tens": 3,
+  	"num_break_secs_ones": 0
+  	 },
+  	 {
+  	"preset_name": "FRIDAY HILL SPRINTS",
+  	"num_reps": 10,
+  	"num_sets": 1,
+  	"num_work_mins": 0,
+  	"num_work_secs_tens": 4,
+  	"num_work_secs_ones": 5,
+  	"num_rest_mins": 1,
+  	"num_rest_secs_tens": 4,
+  	"num_rest_secs_ones": 5,
+  	"num_prep_mins": 0,
+  	"num_prep_secs_tens": 1,
+  	"num_prep_secs_ones": 0,
+  	"num_break_mins": 0,
+  	"num_break_secs_tens": 0,
+  	"num_break_secs_ones": 0
+  	 }
+  ]
+
+}

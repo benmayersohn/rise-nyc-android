@@ -1,0 +1,28 @@
+{
+  "presets":
+  [
+    {"name":"AB-BLASTERS"},
+    {"name":"BURPEES"},
+    {"name":"BUTTKICKS"},
+  	{"name":"CRUNCHES"},
+    {"name":"DRAGON PUSHUPS"},
+    {"name":"FROGGERS"},
+    {"name":"JUMP LUNGES"},
+    {"name":"JUMPING JACKS"},
+    {"name":"MOUNTAIN CLIMBERS"},
+    {"name":"PIKE PUSHUPS"},
+    {"name":"PLANK JACKS"},
+  	{"name":"PUSHUPS"},
+    {"name":"RUSSIAN TWISTS"},
+    {"name":"SPRINTS"},
+    {"name":"SQUAT JUMPS"},
+  	{"name":"SQUATS"},
+    {"name":"SUPERMANS"},
+  	{"name":"T-PLANK TWISTS"},
+  	{"name":"T-PLANK PUSHUPS"},
+    {"name":"TOE TOUCHES"},
+    {"name":"V-UPS"},
+    {"name":"X-BODY CLIMBERS"}
+  ]
+
+}
