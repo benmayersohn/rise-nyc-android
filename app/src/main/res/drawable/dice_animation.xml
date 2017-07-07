@@ -2,12 +2,4 @@
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dice_animation"
     android:oneshot="true">
-    <!--
-    <item android:drawable="@drawable/dice_one" android:duration="50" />
-    <item android:drawable="@drawable/dice_two" android:duration="50" />
-    <item android:drawable="@drawable/dice_three" android:duration="50" />
-    <item android:drawable="@drawable/dice_four" android:duration="50" />
-    <item android:drawable="@drawable/dice_five" android:duration="50" />
-    <item android:drawable="@drawable/dice_six" android:duration="50" />
-    -->
 </animation-list>

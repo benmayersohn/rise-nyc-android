@@ -20,23 +20,11 @@ import android.view.WindowManager;
  */
 
 public class WorkoutActivity extends AppCompatActivity
-        implements StopDialogFragment.OnWorkoutStopped,
-        EndTimerDialogFragment.OnTimerEnded
+        implements FinishWorkoutDialogFragment.OnWorkoutFinished
 {
 
     private TabLayout tabLayout;
     private ViewPager pager;
-
-    private static final int NUM_VIEWS = 3;
-    private static final String CURRENT_VIEW = "CURRENT_VIEW";
-
-    private static final int TIMER_VIEW = 0;
-    private static final int DICE_VIEW = 1;
-    private static final int CARDS_VIEW = 2;
-
-    private static final String TIMER = "TIMER";
-    private static final String CARDS = "CARDS";
-    private static final String DICE = "DICE";
 
     WorkoutPagerAdapter pagerAdapter;
 
@@ -60,7 +48,7 @@ public class WorkoutActivity extends AppCompatActivity
         pager.setAdapter(pagerAdapter);
 
         // set off screen pager limit to 2 (i.e. we can hold all three pages in memory)
-        pager.setOffscreenPageLimit(NUM_VIEWS-1);
+        pager.setOffscreenPageLimit(WorkoutStatic.NUM_VIEWS - 1);
 
         // Set up tab layout listener with pager
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -100,40 +88,28 @@ public class WorkoutActivity extends AppCompatActivity
 
     }
 
+    // We'll only be sent to this method if the rise timer finished. Refresh the pager.
     @Override
-    public void onWorkoutStopped(String workoutType)
+    public void onWorkoutFinished()
     {
-        // Refresh the pager
-        if (workoutType.equals(TIMER)) {
-            pager.setAdapter(pagerAdapter);
-        }
-    }
-
-    @Override
-    public void onTimerEnded(String workoutType){
-        // Refresh the pager
-        if (workoutType.equals(TIMER)) {
-            pager.setAdapter(pagerAdapter);
-        }
+        pager.setAdapter(pagerAdapter);
     }
 
     // We're either on timer page, dice page, or cards page
     // Instantiate appropriate fragment
     private class WorkoutPagerAdapter extends FragmentStatePagerAdapter{
         public WorkoutPagerAdapter(FragmentManager fm){
-
             super(fm);
-
         }
 
         @Override
         public Fragment getItem(int pos) {
 
-            if (pos == TIMER_VIEW) {
-                return TimerFragment.newInstance();
+            if (pos == WorkoutStatic.TIMER_VIEW) {
+                return RiseTimerFragment.newInstance();
             }
 
-            else if(pos == DICE_VIEW) {
+            else if(pos == WorkoutStatic.DICE_VIEW) {
                 return DiceFragment.newInstance();
             }
             // Otherwise it's card view
@@ -150,7 +126,7 @@ public class WorkoutActivity extends AppCompatActivity
 
         @Override
         public int getCount() {
-            return NUM_VIEWS;
+            return WorkoutStatic.NUM_VIEWS;
         }
 
     }

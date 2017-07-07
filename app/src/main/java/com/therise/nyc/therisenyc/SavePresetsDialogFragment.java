@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -23,42 +22,20 @@ import static android.view.View.VISIBLE;
 import static android.view.View.INVISIBLE;
 
 /**
- * IntroDialogFragment: Explains how to use the program when first opening
- * Includes a checkmark for users to indicate they are familiar with this dialog and would
- * not like to see it again.
- *
- * This dialog should only show if we have it set in our preferences to show
+ * SavePresetsDialogFragment: Allows user to save a custom preset
  */
 
 public class SavePresetsDialogFragment extends DialogFragment {
 
-    private static final String PRESETS = "PRESETS";
-    private static final String EXERCISE = "EXERCISE";
-    private static final String TYPED_NAME = "TYPED_NAME";
-    private static final String PRESET_TYPE = "PRESET_TYPE";
-
-    private static final String WORKOUT_TYPE = "WORKOUT_TYPE";
-
-    private static final String BLANK = "";
-
-    // Workout types
-    private static final String CARDS = "CARDS";
-    private static final String TIMER = "TIMER";
-    private static final String DICE = "DICE";
-
-    private static final String SAVE_DIALOG = "SAVE_DIALOG";
-    private static final String CHOSEN_NAME = "CHOSEN_NAME";
-
-    private static final int SAVE_CODE = 3;
     private String chosenName = "";
 
     // Associate custom adapter with our list view
-    private LoadPresetsAdapter adapter;
-    private ListView lv;
+    LoadPresetsAdapter adapter;
+    ListView lv;
 
     private EditText entryView;
     private TextView duplicateWarning;
-    private Button saveButton;
+    Button saveButton;
 
     // Empty constructor
     public SavePresetsDialogFragment(){}
@@ -69,16 +46,17 @@ public class SavePresetsDialogFragment extends DialogFragment {
 
         // Supply presets
         Bundle args = new Bundle();
-        args.putStringArrayList(PRESETS,presetNames);
-        args.putString(WORKOUT_TYPE,workoutType);
-        args.putString(PRESET_TYPE,presetType);
-        args.putString(TYPED_NAME,typedName);
+        args.putStringArrayList(WorkoutStatic.PRESETS,presetNames);
+        args.putString(WorkoutStatic.WORKOUT_TYPE,workoutType);
+        args.putString(WorkoutStatic.PRESET_TYPE,presetType);
+        args.putString(WorkoutStatic.TYPED_NAME,typedName);
         f.setArguments(args);
 
         return f;
     }
 
-    public interface UpdatePresets{
+    // Update save and load dialogs with new preset information
+    interface UpdatePresets{
         void updateSaveFragment(String presetType, String typedName);
         void updateLoadFragment(String presetType, int index);
     }
@@ -92,7 +70,6 @@ public class SavePresetsDialogFragment extends DialogFragment {
         setRetainInstance(true);
     }
 
-    // Show the view stored in fragment_tip.xml
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,11 +84,12 @@ public class SavePresetsDialogFragment extends DialogFragment {
         entryView.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
 
         // Set the text as the current exercise, if we're saving an exercise
-        if (getArguments().getString(PRESET_TYPE).equals(EXERCISE)){
-            entryView.setText(getArguments().getString(TYPED_NAME));
+        if (getArguments().getString(WorkoutStatic.PRESET_TYPE).equals(WorkoutStatic.EXERCISE)){
+            entryView.setText(getArguments().getString(WorkoutStatic.TYPED_NAME));
             chosenName = entryView.getText().toString();
         }
 
+        // Are we trying to enter a preset with the same name as one that is already stored?
         duplicateWarning = (TextView) v.findViewById(R.id.same_name_warning);
 
         // Set a textchanged listener for entryview
@@ -145,7 +123,7 @@ public class SavePresetsDialogFragment extends DialogFragment {
             public void onClick(View v) {
 
                 // Check name first
-                if (getArguments().getStringArrayList(PRESETS).contains(chosenName)){
+                if (getArguments().getStringArrayList(WorkoutStatic.PRESETS).contains(chosenName)){
                     duplicateWarning.setVisibility(VISIBLE);
                 }
 
@@ -153,29 +131,29 @@ public class SavePresetsDialogFragment extends DialogFragment {
                 else {
 
                     Intent intent = new Intent();
-                    intent.putExtra(CHOSEN_NAME, chosenName);
-                    intent.putExtra(PRESET_TYPE,getArguments().getString(PRESET_TYPE));
-                    getTargetFragment().onActivityResult(getTargetRequestCode(), SAVE_CODE, intent);
+                    intent.putExtra(WorkoutStatic.CHOSEN_NAME, chosenName);
+                    intent.putExtra(WorkoutStatic.PRESET_TYPE,getArguments().getString(WorkoutStatic.PRESET_TYPE));
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), WorkoutStatic.SAVE_CODE, intent);
 
                     // Updates presets with new entry
-                    switch (getArguments().getString(WORKOUT_TYPE)){
-                        case TIMER:
-                            ((TimerFragment)getTargetFragment()).updateSaveFragment(
-                                    getArguments().getString(PRESET_TYPE),getArguments().getString(TYPED_NAME));
-                            ((TimerFragment)getTargetFragment()).updateLoadFragment(
-                                    getArguments().getString(PRESET_TYPE),-1);
+                    switch (getArguments().getString(WorkoutStatic.WORKOUT_TYPE)){
+                        case WorkoutStatic.TIMER:
+                            ((RiseTimerFragment)getTargetFragment()).updateSaveFragment(
+                                    getArguments().getString(WorkoutStatic.PRESET_TYPE),getArguments().getString(WorkoutStatic.TYPED_NAME));
+                            ((RiseTimerFragment)getTargetFragment()).updateLoadFragment(
+                                    getArguments().getString(WorkoutStatic.PRESET_TYPE),-1);
                             break;
-                        case DICE:
+                        case WorkoutStatic.DICE:
                             ((DiceFragment)getTargetFragment()).updateSaveFragment(
-                                    getArguments().getString(PRESET_TYPE),getArguments().getString(TYPED_NAME));
+                                    getArguments().getString(WorkoutStatic.PRESET_TYPE),getArguments().getString(WorkoutStatic.TYPED_NAME));
                             ((DiceFragment)getTargetFragment()).updateLoadFragment(
-                                    getArguments().getString(PRESET_TYPE),-1);
+                                    getArguments().getString(WorkoutStatic.PRESET_TYPE),-1);
                             break;
-                        case CARDS:
+                        case WorkoutStatic.CARDS:
                             ((CardsFragment)getTargetFragment()).updateSaveFragment(
-                                    getArguments().getString(PRESET_TYPE),getArguments().getString(TYPED_NAME));
+                                    getArguments().getString(WorkoutStatic.PRESET_TYPE),getArguments().getString(WorkoutStatic.TYPED_NAME));
                             ((CardsFragment)getTargetFragment()).updateLoadFragment(
-                                    getArguments().getString(PRESET_TYPE),-1);
+                                    getArguments().getString(WorkoutStatic.PRESET_TYPE),-1);
                             break;
                     }
 
@@ -183,7 +161,7 @@ public class SavePresetsDialogFragment extends DialogFragment {
                     // Close fragment
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
-                    ft.remove(fm.findFragmentByTag(SAVE_DIALOG));
+                    ft.remove(fm.findFragmentByTag(WorkoutStatic.SAVE_DIALOG));
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                     ft.commit();
                 }
@@ -195,22 +173,14 @@ public class SavePresetsDialogFragment extends DialogFragment {
 
         // Set up listview
         lv = (ListView) v.findViewById(R.id.presets_list_view);
+
+        // Load stored presets so user knows which names are already taken
         adapter = new LoadPresetsAdapter(getActivity(), getTargetFragment(),
-                getTargetRequestCode(), SAVE_CODE, getArguments().getStringArrayList(PRESETS),
-                getArguments().getString(PRESET_TYPE), -1);
+                getTargetRequestCode(), WorkoutStatic.SAVE_CODE, getArguments().getStringArrayList(WorkoutStatic.PRESETS),
+                getArguments().getString(WorkoutStatic.PRESET_TYPE), -1);
         lv.setAdapter(adapter);
 
-        // Return to activity
-
         return v;
-    }
-
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
     }
 
 }

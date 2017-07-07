@@ -7,70 +7,70 @@ package com.therise.nyc.therisenyc;
  */
 
 public class Location {
-    String _name;
-    String _borough;
-    String _day;
-    String _place;
-    String _img;
-    String _desc;
+    private String name;
+    private String borough;
+    private String day;
+    private String place;
+    private String img;
+    private String desc;
 
-    public Location(){   }
+    public Location(){ }
 
-    public Location(String _name, String _borough, String _day, String _place, String _img, String _desc) {
-        this._name = _name;
-        this._borough = _borough;
-        this._day = _day;
-        this._place = _place;
-        this._img = _img;
-        this._desc = _desc;
+    public Location(String name, String borough, String day, String place, String img, String desc) {
+        this.name = name;
+        this.borough = borough;
+        this.day = day;
+        this.place = place;
+        this.img = img;
+        this.desc = desc;
     }
 
     public String getName(){
-        return this._name;
+        return this.name;
     }
 
     public void setName(String name){
-        this._name = name;
+        this.name = name;
     }
 
     public String getBorough(){
-        return this._borough;
+        return this.borough;
     }
 
     public void setBorough(String borough){
-        this._borough = borough;
+        this.borough = borough;
     }
 
     public String getDay(){
-        return this._day;
+        return this.day;
     }
 
     public void setDay(String day){
-        this._day = day;
+        this.day = day;
     }
 
     public String getPlace(){
-        return this._place;
+        return this.place;
     }
 
     public void setPlace(String place){
-        this._place = place;
+        this.place = place;
     }
 
     public String getImg(){
-        return this._img;
+        return this.img;
     }
 
     public void setImg(String img){
-        this._img = img;
+        this.img = img;
     }
 
     public String getDesc(){
-        return this._desc;
+        return this.desc;
     }
 
     public void setDesc(String desc){
-        this._desc = desc;
+        this.desc = desc;
     }
 
 }

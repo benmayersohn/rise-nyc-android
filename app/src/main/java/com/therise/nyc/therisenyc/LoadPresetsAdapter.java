@@ -1,8 +1,7 @@
 package com.therise.nyc.therisenyc;
 
-/**
- * Created by mayerzine on 1/22/17.
- */
+
+// LoadPresetsAdapter: Set up ListView of presets/exercises to load
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,45 +14,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import java.util.ArrayList;
+import java.util.List;
+
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-// This is our list adapter for the presets/exercises
-// If we're loading an exercise, make sure that the name appears in the text box
+class LoadPresetsAdapter extends BaseAdapter{
 
-// Construct custom view for each fragment
-public class LoadPresetsAdapter extends BaseAdapter{
-
-    private ArrayList<String> presetNames;
+    private List<String> presetNames;
     private String presetType;
+
     private static LayoutInflater inflater=null;
+
     private FragmentActivity act;
     private Fragment targetFragment;
     private int requestCode;
     private int resultCode;
     private int index;
 
-    private static final String LOAD_DIALOG = "LOAD_DIALOG";
-    private static final String SELECTED_ENTRY = "SELECTED_ENTRY";
-    private static final String DELETE_ENTRY = "DELETE_ENTRY";
-    private static final String PRESET_TYPE = "PRESET_TYPE";
-    private static final String INDEX = "INDEX";
-
-    private static final String PRESET = "PRESET";
-    private static final String EXERCISE = "EXERCISE";
-
     private static final int LOAD_CODE = 2;
 
     // Construct view
-    public LoadPresetsAdapter(FragmentActivity act, Fragment targetFragment,
+    LoadPresetsAdapter(FragmentActivity act, Fragment targetFragment,
                               int requestCode, int resultCode, ArrayList<String> presetNames,
                               String presetType, int index) {
         this.presetNames = presetNames;
         this.presetType = presetType;
         this.index = index;
 
-        this.act=act;
+        this.act = act;
         this.targetFragment = targetFragment;
         this.requestCode = requestCode;
         this.resultCode = resultCode;
@@ -85,19 +75,19 @@ public class LoadPresetsAdapter extends BaseAdapter{
         TextView presetTitle;
     }
 
-    public void chooseEntry(int position, boolean deleteEntry){
+    private void chooseEntry(int position, boolean deleteEntry){
 
         // What entry did we choose?
         Intent intent = new Intent();
-        intent.putExtra(SELECTED_ENTRY, position);
+        intent.putExtra(WorkoutStatic.SELECTED_ENTRY, position);
 
         // Are we deleting it?
-        intent.putExtra(DELETE_ENTRY, deleteEntry);
+        intent.putExtra(WorkoutStatic.DELETE_ENTRY, deleteEntry);
 
-        intent.putExtra(INDEX, index);
+        intent.putExtra(WorkoutStatic.INDEX, index);
 
         // Are we displaying it? (we are if it's an exercise)
-        intent.putExtra(PRESET_TYPE,presetType);
+        intent.putExtra(WorkoutStatic.PRESET_TYPE,presetType);
 
         targetFragment.onActivityResult(requestCode, LOAD_CODE, intent);
 
@@ -105,7 +95,7 @@ public class LoadPresetsAdapter extends BaseAdapter{
         FragmentManager fm = targetFragment.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
-        ft.remove(fm.findFragmentByTag(LOAD_DIALOG));
+        ft.remove(fm.findFragmentByTag(WorkoutStatic.LOAD_DIALOG));
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
         ft.commit();
 
@@ -121,7 +111,6 @@ public class LoadPresetsAdapter extends BaseAdapter{
         }
 
         String currName = (String) getItem(position);
-
 
         holder.presetTitle = (TextView) convertView.findViewById(R.id.preset_choice);
         holder.presetTitle.setText(currName);
@@ -149,13 +138,13 @@ public class LoadPresetsAdapter extends BaseAdapter{
 
                     int duration = Toast.LENGTH_SHORT;
 
-                    if (presetType.equals(PRESET)) {
+                    if (presetType.equals(WorkoutStatic.PRESET)) {
                         // We post a message that we deleted a preset
                         Toast toast = Toast.makeText(act, R.string.preset_deleted, duration);
                         toast.show();
                     }
 
-                    if (presetType.equals(EXERCISE)) {
+                    if (presetType.equals(WorkoutStatic.EXERCISE)) {
                         // We post a message that we deleted a preset
                         Toast toast = Toast.makeText(act, R.string.exercise_deleted, duration);
                         toast.show();

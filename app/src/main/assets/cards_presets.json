@@ -2,13 +2,12 @@
   "presets":
   [
   	{
-		"preset_name": "CORE BODY BOOT CAMP",
-    "exercises": ["HIGH KNEES","SQUATS","CRUNCHES","PUSHUPS"]
-  },
-  {
-		"preset_name": "WAYBACK WEDNESDAY",
-    "exercises": ["CRUNCHES","PUSHUPS","CRUNCHES","PUSHUPS"]
-  }
+		  "preset_name": "CORE BODY BOOT CAMP",
+      "exercises": ["HIGH KNEES","SQUATS","CRUNCHES","PUSHUPS"]
+    },
+    {
+		  "preset_name": "WAYBACK WEDNESDAY",
+      "exercises": ["CRUNCHES","PUSHUPS","CRUNCHES","PUSHUPS"]
+    }
   ]
-
 }

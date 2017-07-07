@@ -1,8 +1,6 @@
 package com.therise.nyc.therisenyc;
 
-/**
- * Created by mayerzine on 1/15/17.
- */
+// LocFragmentAdapter: Set up LocPage views
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,19 +15,20 @@ import android.widget.TextView;
 import java.util.List;
 
 // Construct custom view for each fragment
-public class LocFragmentAdapter extends BaseAdapter{
+class LocFragmentAdapter extends BaseAdapter{
 
     private List<LocPage> pages;
     private int count;
     private Context context;
-    private static LayoutInflater inflater=null;
+    private static LayoutInflater inflater = null;
 
     // Construct view
-    public LocFragmentAdapter(FragmentActivity act, List<LocPage> pages) {
+    LocFragmentAdapter(FragmentActivity act, List<LocPage> pages) {
 
         this.pages = pages;
 
-        context=act;
+        context = act;
+
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -39,7 +38,6 @@ public class LocFragmentAdapter extends BaseAdapter{
     }
     @Override
     public int getCount() {
-
         return count;
     }
 
@@ -87,10 +85,6 @@ public class LocFragmentAdapter extends BaseAdapter{
 
         holder.workoutDesc.setText(pages.get(position).getDesc());
 
-        // get bitmap from image
-
-        // holder.workoutImg.setImageBitmap(pages.get(position).getImg());
-
         // Load page in background
         // Then push to UI
         new AsyncTask<ViewHolder, Void, Bitmap>() {
@@ -103,9 +97,9 @@ public class LocFragmentAdapter extends BaseAdapter{
                 v = params[0];
 
                 // Load the image
-                return LocationFragment.decodeSampledBitmapFromResource(context.getResources(),
+                return BitmapTools.decodeSampledBitmapFromResource(context.getResources(),
                         pages.get(position).getImg(),
-                        LocationFragment.IMAGE_WIDTH,LocationFragment.IMAGE_HEIGHT);
+                        LocationStatic.IMAGE_WIDTH,LocationStatic.IMAGE_HEIGHT);
             }
 
             @Override

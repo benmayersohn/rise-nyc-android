@@ -23,10 +23,6 @@ public class LocationActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager pager;
-    private static final String DAY_VIEW = "DAY_VIEW";
-    private static final String BOROUGH_VIEW = "BOROUGH_VIEW";
-    private static final int NUM_VIEWS_DAY = 5;
-    private static final int NUM_VIEWS_BOROUGH = 3;
     private String currView;
     private int numViews;
 
@@ -34,19 +30,15 @@ public class LocationActivity extends AppCompatActivity {
 
     // We create the database here and let the fragments access them via
 
-    // Arrays of days and boroughs (in order of tabs)
-    private String[] days = {"M","T","W","R","F"};
-    private String[] boroughs = {"Manhattan","Brooklyn","Queens"};
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Start out with locations by day
         setContentView(R.layout.locations);
-        currView = DAY_VIEW;
-        numViews = NUM_VIEWS_DAY;
+
+        currView = LocationStatic.DAY_VIEW;
+        numViews = LocationStatic.NUM_VIEWS_DAY;
 
         // Create tab layout
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -54,15 +46,15 @@ public class LocationActivity extends AppCompatActivity {
         pager = (ViewPager) findViewById(R.id.pager);
 
         // Store pages off screen so we don't need to reload them
-        pager.setOffscreenPageLimit(NUM_VIEWS_DAY-1);
+        pager.setOffscreenPageLimit(LocationStatic.NUM_VIEWS_DAY-1);
 
         // Associate adapter with pager
         pagerAdapter = new LocationPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
 
         // Add tabs. Initially view by day
-        for (int i = 0; i <days.length; i++) {
-            tabLayout.addTab(tabLayout.newTab().setText(days[i]),i);
+        for (int i = 0; i <LocationStatic.DAYS.length; i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(LocationStatic.DAYS[i]),i);
         }
 
         // Set up tab layout listener with pager
@@ -92,7 +84,11 @@ public class LocationActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                tabLayout.getTabAt(position).select();
+                TabLayout.Tab tab = tabLayout.getTabAt(position);
+
+                if (tab != null){
+                    tab.select();
+                }
             }
 
             @Override
@@ -104,18 +100,18 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     private class LocationPagerAdapter extends FragmentStatePagerAdapter{
-        public LocationPagerAdapter(FragmentManager fm){
+        LocationPagerAdapter(FragmentManager fm){
             super(fm);
         }
 
         @Override
         public Fragment getItem(int pos) {
-            if (currView.equals(DAY_VIEW)) {
-                return LocationFragment.newInstance(days[pos], currView);
+            if (currView.equals(LocationStatic.DAY_VIEW)) {
+                return LocationFragment.newInstance(LocationStatic.DAYS[pos], currView);
             }
 
             // Otherwise it's borough view
-            return LocationFragment.newInstance(boroughs[pos], currView);
+            return LocationFragment.newInstance(LocationStatic.BOROUGHS[pos], currView);
 
         }
 
@@ -149,28 +145,31 @@ public class LocationActivity extends AppCompatActivity {
 
             // Switch to sorting by borough
             case R.id.by_borough:
-                if (currView.equals(DAY_VIEW)) {
+                if (currView.equals(LocationStatic.DAY_VIEW)) {
 
                     // Set current tab to 0
-                    tabLayout.getTabAt(0).select();
+                    TabLayout.Tab tab = tabLayout.getTabAt(0);
+                    if (tab != null){
+                        tab.select();
+                    }
 
                     // Change view
-                    currView = BOROUGH_VIEW;
-                    numViews = NUM_VIEWS_BOROUGH;
+                    currView = LocationStatic.BOROUGH_VIEW;
+                    numViews = LocationStatic.NUM_VIEWS_BOROUGH;
 
                     // Scrollable tab mode for boroughs because there's a lot of text
                     tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
                     // Remove all tabs up to first one
-                    for (int i = days.length - 1; i >= 0; i--) {
+                    for (int i = LocationStatic.DAYS.length - 1; i >= 0; i--) {
                         pagerAdapter.notifyDataSetChanged();
                         tabLayout.removeTabAt(i);
                     }
 
                     // Add new tabs
-                    for (int i = 0; i < boroughs.length; i++) {
+                    for (int i = 0; i < LocationStatic.BOROUGHS.length; i++) {
                         pagerAdapter.notifyDataSetChanged();
-                        tabLayout.addTab(tabLayout.newTab().setText(boroughs[i]), i);
+                        tabLayout.addTab(tabLayout.newTab().setText(LocationStatic.BOROUGHS[i]), i);
                     }
                 }
 
@@ -178,28 +177,31 @@ public class LocationActivity extends AppCompatActivity {
 
             // Switch to sorting by day
             case R.id.by_dayofweek:
-                if (currView.equals(BOROUGH_VIEW)) {
+                if (currView.equals(LocationStatic.BOROUGH_VIEW)) {
 
                     // Set current tab to 0
-                    tabLayout.getTabAt(0).select();
+                    TabLayout.Tab tab = tabLayout.getTabAt(0);
+                    if (tab != null){
+                        tab.select();
+                    }
 
                     // Fixed tab mode for days so it fits evenly on screen
                     tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
                     // Change view
-                    currView = DAY_VIEW;
-                    numViews = NUM_VIEWS_DAY;
+                    currView = LocationStatic.DAY_VIEW;
+                    numViews = LocationStatic.NUM_VIEWS_DAY;
 
                     // Remove all tabs up to first one
-                    for (int i = boroughs.length-1; i >= 0; i--){
+                    for (int i = LocationStatic.BOROUGHS.length-1; i >= 0; i--){
                         pagerAdapter.notifyDataSetChanged();
                         tabLayout.removeTabAt(i);
                     }
 
                     // Add new tabs and pages together
-                    for (int i = 0; i <days.length; i++) {
+                    for (int i = 0; i <LocationStatic.DAYS.length; i++) {
                         pagerAdapter.notifyDataSetChanged();
-                        tabLayout.addTab(tabLayout.newTab().setText(days[i]),i);
+                        tabLayout.addTab(tabLayout.newTab().setText(LocationStatic.DAYS[i]),i);
                     }
 
                 }

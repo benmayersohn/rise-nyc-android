@@ -21,6 +21,8 @@
         <activity android:name=".Preferences" />
         <activity android:name=".WorkoutActivity" />
         <activity android:name=".LocationActivity" />
+        <activity android:name=".DiceActivity" />
+        <activity android:name=".CardsActivity" />
     </application>
 
 </manifest>

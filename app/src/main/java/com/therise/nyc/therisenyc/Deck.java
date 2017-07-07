@@ -10,12 +10,6 @@ import java.util.ArrayList;
 public class Deck {
     private List<Card> cards;
 
-    private static final int[] cardNumbers = {2,3,4,5,6,7,8,9,10,11,12,13,14};
-
-    private static final String[] suits = {Card.SPADES, Card.HEARTS, Card.DIAMONDS, Card.CLUBS};
-
-    private static final String[] jokers = {Card.RED, Card.BLACK};
-
     // Empty deck, default constructor
     // We can use this first the pile of cards we create as we deal
     public Deck(){
@@ -29,15 +23,15 @@ public class Deck {
         cards = new ArrayList<>();
 
         // Construct deck without jokers first
-        for (int number : cardNumbers){
-            for (String suit : suits){
+        for (int number : CardsStatic.CARD_NUMBERS){
+            for (String suit : CardsStatic.SUITS){
                 cards.add(new Card(number,suit));
             }
         }
 
         // Add jokers if we got 'em
         if (hasJokers){
-            for (String color: jokers){
+            for (String color: CardsStatic.JOKERS){
                 cards.add(new Card(color));
             }
 
@@ -47,11 +41,6 @@ public class Deck {
     // Get card at position
     public Card getCardAt(int position){
         return cards.get(position);
-    }
-
-    // Remove card at position
-    public void removeCardAt(int position){
-        cards.remove(position);
     }
 
     // Remove card specified

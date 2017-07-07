@@ -2,11 +2,8 @@ package com.therise.nyc.therisenyc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,7 +15,6 @@ import android.widget.ListView;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -31,84 +27,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class LocationFragment extends Fragment {
     final private AtomicReference<SharedPreferences> prefs = new AtomicReference<>();
 
-    // Keys from SQL database
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_DAY = "day";
-    private static final String KEY_PLACE = "place";
-    private static final String KEY_DESC = "desc";
-    private static final String KEY_IMG = "img";
-
-    private static final String TAB_NAME = "tabName";
-    private static final String VIEW_TYPE = "viewType";
-
-    private static final String DAY_VIEW = "DAY_VIEW";
-
-    public static final int IMAGE_HEIGHT = 220;
-    public static final int IMAGE_WIDTH = 300;
-
-    // Create a map between shortened weekdays and values
-    private static final HashMap<String,String> days = new HashMap(){
-        {
-            put("M","Monday");
-            put("T","Tuesday");
-            put("W","Wednesday");
-            put("R","Thursday");
-            put("F","Friday");
-        }
-    };
-
-    // We'll assign these on creation
-    private String tabName=null;
-    private String viewType=null;
-
-    // DB stuff
-    private LocationDatabaseHelper repo;
+    // DB
     private SQLiteDatabase db;
 
     // Constructor
     public LocationFragment() {};
-
-    // Calculate proper bitmap size for required width/height
-    // don't call directly
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-    // Use THIS method to load bitmap efficiently
-    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                         int reqWidth, int reqHeight) {
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(res, resId, options);
-    }
 
     // We get the name of the tab and the view from the activity
     public static LocationFragment newInstance(String tabName, String viewType) {
@@ -118,8 +41,8 @@ public class LocationFragment extends Fragment {
         Bundle args = new Bundle();
 
         // Add arguments to fragment
-        args.putString(TAB_NAME, tabName);
-        args.putString(VIEW_TYPE, viewType);
+        args.putString(LocationStatic.TAB_NAME, tabName);
+        args.putString(LocationStatic.VIEW_TYPE, viewType);
 
         fragment.setArguments(args);
         return fragment;
@@ -127,18 +50,17 @@ public class LocationFragment extends Fragment {
 
     // Get name of tab we're on
     public String getTabName() {
-        return getArguments().getString(TAB_NAME,null);
+        return getArguments().getString(LocationStatic.TAB_NAME,null);
     }
 
     // Get view type, either DAY_VIEW or BOROUGH_VIEW
     public String getViewType() {
-        return getArguments().getString(VIEW_TYPE,null);
+        return getArguments().getString(LocationStatic.VIEW_TYPE,null);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -160,24 +82,24 @@ public class LocationFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_location, container, false);
 
         // By this step we should have our database
-        tabName = getTabName();
-        viewType = getViewType();
+        String tabName = getTabName();
+        String viewType = getViewType();
 
         // Query by day or borough
-        Cursor cursor = null;
+        Cursor cursor;
         String[] args = {tabName};
 
         // We'll load our database first
         try
         {
-            repo = LocationDatabaseHelper.getInstance(getActivity().getApplicationContext());
+            LocationDatabaseHelper repo = LocationDatabaseHelper.getInstance(getActivity());
             db = repo.getReadableDatabase();
         }
 
-        catch(Exception e){}
+        catch(Exception e){e.printStackTrace();}
 
         // Query
-        if (viewType.equals(DAY_VIEW))
+        if (viewType.equals(LocationStatic.DAY_VIEW))
         {
             cursor = db.rawQuery("SELECT * FROM locations WHERE day = ? ", args);
         }
@@ -208,8 +130,8 @@ public class LocationFragment extends Fragment {
         Bitmap imgBitmap;
 
         // set height and width of bitmap (in dp)
-        int newHeight = IMAGE_HEIGHT;
-        int newWidth = IMAGE_WIDTH;
+        int newHeight = LocationStatic.IMAGE_HEIGHT;
+        int newWidth = LocationStatic.IMAGE_WIDTH;
 
         String desc = null;
 
@@ -219,12 +141,12 @@ public class LocationFragment extends Fragment {
 
         // Get info for each workout that matched query
         while (cursor.moveToNext()) {
-            title = cursor.getString(cursor.getColumnIndex(KEY_TITLE));
-            day = days.get(cursor.getString(cursor.getColumnIndex(KEY_DAY)));
-            place = cursor.getString(cursor.getColumnIndex(KEY_PLACE));
-            img = getResources().getIdentifier(cursor.getString(cursor.getColumnIndex(KEY_IMG)), "drawable", getActivity().getPackageName());
+            title = cursor.getString(cursor.getColumnIndex(LocationStatic.KEY_TITLE));
+            day = LocationStatic.DAY_MAP.get(cursor.getString(cursor.getColumnIndex(LocationStatic.KEY_DAY)));
+            place = cursor.getString(cursor.getColumnIndex(LocationStatic.KEY_PLACE));
+            img = getResources().getIdentifier(cursor.getString(cursor.getColumnIndex(LocationStatic.KEY_IMG)), "drawable", getActivity().getPackageName());
 
-            desc_location = cursor.getString(cursor.getColumnIndex(KEY_DESC));
+            desc_location = cursor.getString(cursor.getColumnIndex(LocationStatic.KEY_DESC));
 
             // Read from text file to get description
             try {
@@ -240,9 +162,7 @@ public class LocationFragment extends Fragment {
                 br.close();
 
             }
-            catch(Exception e){}
-
-            // imgBitmap = decodeSampledBitmapFromResource(getResources(), img,IMAGE_WIDTH,IMAGE_HEIGHT);
+            catch(Exception e){e.printStackTrace();}
 
             // Add all this to list of LocPage
             pages.add(new LocPage(title, place, day, img, desc));

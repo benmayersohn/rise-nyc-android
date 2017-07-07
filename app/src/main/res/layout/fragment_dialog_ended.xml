@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.therise.nyc.therisenyc.EndTimerDialogFragment">
+    tools:context="com.therise.nyc.therisenyc.FinishWorkoutDialogFragment">
 
     <TextView android:id="@+id/end_timer_dialog"
         android:layout_width="match_parent"

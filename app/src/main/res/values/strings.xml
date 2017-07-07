@@ -10,6 +10,8 @@
     <string name="lets_workout">Workout Tools</string>
     <string name="timer">Timer</string>
     <string name="dice">Dice</string>
+    <string name="roll_number">Roll: 1</string>
+    <string name="die_image">Die Image</string>
     <string name="cards">Cards</string>
     <string name="roll">Roll Dice</string>
     <string name="start">Start</string>
@@ -87,7 +89,8 @@
         1) Work is at least 5 seconds in length (0:05)\n\n
         2) Rest, Break, and Prep are either\n\n
         (i) turned off (that is, 0:00)\n
-        (ii) at least 5 seconds in length (0:05)
+        (ii) at least 5 seconds in length (0:05)\n\n
+        3) You have at least 1 rep and 1 set.
     </string>
     <string name="rest">REST</string>
     <string name="play_desc">Press play to begin workout</string>

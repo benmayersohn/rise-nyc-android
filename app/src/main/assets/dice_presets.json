@@ -2,10 +2,10 @@
   "presets":
   [
     {
-		"preset_name": "DEFAULT",
-		"exercises": ["SPRINTS","MOUNTAIN CLIMBERS","PUSHUPS",
-      "TOE TOUCHES","SQUAT JUMPS","SPEED SKATERS"]
-  }
+		  "preset_name": "DEFAULT",
+		  "exercises": ["SPRINTS","MOUNTAIN CLIMBERS","PUSHUPS",
+        "TOE TOUCHES","SQUAT JUMPS","SPEED SKATERS"]
+    }
   ]
 
 }

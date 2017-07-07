@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/rect_border4"
-    tools:context="com.therise.nyc.therisenyc.TimerIssueDialogFragment">
+    tools:context="com.therise.nyc.therisenyc.RiseTimerIssueDialogFragment">
 
     <TextView android:id="@+id/timer_issue_heading"
         android:layout_width="match_parent"

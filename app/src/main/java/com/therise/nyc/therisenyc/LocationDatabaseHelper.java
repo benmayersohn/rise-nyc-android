@@ -1,10 +1,7 @@
 package com.therise.nyc.therisenyc;
 
-/**
- * Created by mayerzine on 1/15/17.
- *
- * SQL database helper
- */
+
+// SQL database helper - use to load up locations
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -17,42 +14,39 @@ import java.io.OutputStream;
 import java.io.File;
 import android.content.res.AssetManager;
 
-public class LocationDatabaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 1;
-    private static final String DB_NAME = "locations.db";
+class LocationDatabaseHelper extends SQLiteOpenHelper {
     private static File DB_FILE;
-    private Context myContext;
+    private Context context;
 
-    private boolean mInvalidDatabaseFile = false;
-    private boolean mIsUpgraded = false;
+    private boolean invalidDatabaseFile = false;
+    private boolean isUpgraded = false;
 
     /**
      * number of users of the database connection.
-     * */
-    private int mOpenConnections = 0;
+     */
 
-    // Load our database of locations
-    private SQLiteDatabase locdata;
+    private int numOpenConnections = 0;
 
-    private static LocationDatabaseHelper mInstance;
+    private static LocationDatabaseHelper helperInstance;
 
     // Create instance of database helper if one not already initialized
-    synchronized static public LocationDatabaseHelper getInstance(Context context) throws IOException{
+    synchronized static LocationDatabaseHelper getInstance(Context context) throws IOException{
 
-        if (mInstance == null) {
-            mInstance = new LocationDatabaseHelper(context.getApplicationContext());
+        if (helperInstance == null) {
+            helperInstance = new LocationDatabaseHelper(context.getApplicationContext());
         }
 
-        return mInstance;
+        return helperInstance;
     }
 
     // constructor (called by getInstance)
     private LocationDatabaseHelper(Context ctxt) throws IOException{
-        super(ctxt, DB_NAME, null, VERSION);
-        this.myContext = ctxt;
-        DB_FILE = ctxt.getDatabasePath(DB_NAME);
+        super(ctxt, LocationStatic.DB_NAME, null, LocationStatic.VERSION);
+        this.context = ctxt;
 
-        locdata = null;
+        DB_FILE = ctxt.getDatabasePath(LocationStatic.DB_NAME);
+
+        SQLiteDatabase locdata = null;
 
         // Try loading database
         try {
@@ -61,12 +55,13 @@ public class LocationDatabaseHelper extends SQLiteOpenHelper {
             if (locdata != null) {
                 locdata.close();
             }
-            if (mInvalidDatabaseFile) {
+            if (invalidDatabaseFile) {
                 copyDatabase();
             }
         }
 
         catch (SQLiteException e) {
+            e.printStackTrace();
         }
 
         finally {
@@ -79,20 +74,21 @@ public class LocationDatabaseHelper extends SQLiteOpenHelper {
     // Copies database from .db file to app storage (so we don't need to keep reloading)
     private void copyDatabase() throws IOException{
 
-        AssetManager assetManager = myContext.getResources().getAssets();
+        AssetManager assetManager = context.getResources().getAssets();
         InputStream in = null;
         OutputStream out = null;
         try {
-            in = assetManager.open(DB_NAME);
+            in = assetManager.open(LocationStatic.DB_NAME);
             out = new FileOutputStream(DB_FILE);
             byte[] buffer = new byte[1024];
-            int read = 0;
+            int read;
             while ((read = in.read(buffer)) != -1) {
                 out.write(buffer, 0, read);
             }
         }
 
         catch (IOException e) {
+            e.printStackTrace();
         }
 
         finally {
@@ -101,18 +97,18 @@ public class LocationDatabaseHelper extends SQLiteOpenHelper {
                     in.close();
                 }
 
-                catch (IOException e) {}
+                catch (IOException e) {e.printStackTrace();}
             }
             if (out != null) {
                 try {
                     out.close();
                 }
 
-                catch (IOException e) {}
+                catch (IOException e) {e.printStackTrace();}
             }
         }
         setDatabaseVersion();
-        mInvalidDatabaseFile = false;
+        invalidDatabaseFile = false;
 
     }
 
@@ -122,8 +118,8 @@ public class LocationDatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public synchronized void close() {
-        mOpenConnections--;
-        if (mOpenConnections == 0) {
+        numOpenConnections--;
+        if (numOpenConnections == 0) {
             super.close();
         }
     }
@@ -131,24 +127,30 @@ public class LocationDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // We don't want to create a new file, bc we already have our database
-        mInvalidDatabaseFile = true;
+        invalidDatabaseFile = true;
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // We don't want to create a new file, bc we already have our database
-        mInvalidDatabaseFile = true;
-        mIsUpgraded = true;
+        invalidDatabaseFile = true;
+        isUpgraded = true;
     }
 
     private void setDatabaseVersion() {
         SQLiteDatabase db = null;
+
         try {
             db = SQLiteDatabase.openDatabase(DB_FILE.getAbsolutePath(), null,
                     SQLiteDatabase.OPEN_READWRITE);
-            db.execSQL("PRAGMA user_version = " + VERSION);
-        } catch (SQLiteException e ) {
-        } finally {
+            db.execSQL(LocationStatic.USER_VERSION_STRING + LocationStatic.VERSION);
+        }
+
+        catch (SQLiteException e ) {
+            e.printStackTrace();
+        }
+
+         finally {
             if (db != null && db.isOpen()) {
                 db.close();
             }

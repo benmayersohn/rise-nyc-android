@@ -33,56 +33,49 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_weight = ".4"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:baselineAligned="false">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:weightSum="1">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/die_image"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_weight=".55"
+            android:contentDescription="@string/die_image"
+            android:src="@drawable/dice_one" />
+
+        <ImageView
+            android:id="@+id/right_arrow"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:src="@drawable/dice_one"
-                android:layout_weight=".55"
-                android:id="@+id/die_image" />
-
-            <ImageView
-                android:contentDescription="@string/right_arrow"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_weight=".54"
-                android:src="@drawable/ic_skip_next_blue_24dp"
-                android:id="@+id/right_arrow"
-                android:gravity="center"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/rect_border2" />
-
-        </LinearLayout>
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".54"
+            android:background="@drawable/rect_border2"
+            android:contentDescription="@string/right_arrow"
+            android:gravity="center"
+            android:src="@drawable/ic_skip_next_blue_24dp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp">
 
         <TextView
-            android:text="@string/current_card"
+            android:id="@+id/roll_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/roll_number"
-            android:textAlignment="center"
-            android:textSize="25sp"
-            android:textColor="@color/white"
-            android:textStyle="normal|bold"
-            android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/rect_border3" />
+            android:background="@drawable/rect_border3"
+            android:gravity="center_horizontal"
+            android:text="@string/roll_number"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="normal|bold" />
 
 
     </LinearLayout>
@@ -98,12 +91,25 @@
         android:weightSum="3">
 
         <ImageButton
+            android:id="@+id/pause_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:layout_weight=".5"
+            android:background="@drawable/rect_border4"
+            android:contentDescription="@string/pause"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_pause_black_24dp"
+            tools:ignore="NestedWeights" />
+
+        <ImageButton
             android:id="@+id/stop_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
             android:layout_weight=".5"
             android:background="@drawable/rect_border4"
             android:contentDescription="@string/stop"
@@ -112,7 +118,7 @@
             android:src="@drawable/ic_stop_black_24dp" />
 
         <TextView
-            android:id="@+id/dice_time_elapsed"
+            android:id="@+id/time_elapsed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

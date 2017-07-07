@@ -1,6 +1,6 @@
 package com.therise.nyc.therisenyc;
 
-import android.content.Intent;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -10,37 +10,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
-public class EndTimerDialogFragment extends DialogFragment {
+// RiseTimerIssueDialogFragment - show if we've entered any incorrect parameters to the Rise Timer
 
-    private Button okay;  // end workout
-
-    private static final String END_DIALOG = "END_DIALOG";
-    private static final String WORKOUT_TYPE = "WORKOUT_TYPE";
-
-    private static final String TIMER = "TIMER";
-    private static final String CARDS = "CARDS";
-    private static final String DICE = "DICE";
-
-    private static final int STOP_CODE = 1;
-
-    // This allows our activity to refresh the timer fragment
-    public interface OnTimerEnded{
-        void onTimerEnded(String workoutType);
-    }
+public class RiseTimerIssueDialogFragment extends DialogFragment {
 
     // Empty constructor
-    public EndTimerDialogFragment(){}
+    public RiseTimerIssueDialogFragment(){}
 
     // Create a new instance
-    static EndTimerDialogFragment newInstance(String workoutType) {
-        EndTimerDialogFragment f = new EndTimerDialogFragment();
+    static RiseTimerIssueDialogFragment newInstance() {
+        RiseTimerIssueDialogFragment f = new RiseTimerIssueDialogFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putString(WORKOUT_TYPE,workoutType);
         f.setArguments(args);
 
         return f;
@@ -54,13 +38,10 @@ public class EndTimerDialogFragment extends DialogFragment {
         setRetainInstance(true);
     }
 
-    // Show the view stored in fragment_tip.xml
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_dialog_ended, container, false);
-
-        return v;
+        return inflater.inflate(R.layout.fragment_timer_issue, container, false);
     }
 
 
@@ -69,34 +50,41 @@ public class EndTimerDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get Button and Dialog CheckBox from view
-        okay = (Button) view.findViewById(R.id.okay_button);
+        Button okay = (Button) view.findViewById(R.id.okay_button);
 
         // Set onClick listener on button
         okay.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick (View v){
 
-                // Tell fragment to stop workout
-                // For the timer, don't run this; for the cards and dice, run
-
-                if (!(getArguments().getString(WORKOUT_TYPE).equals(TIMER))) {
-                    getTargetFragment().onActivityResult(getTargetRequestCode(), STOP_CODE, new Intent());
-                }
-
                 // Close fragment
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.remove(fm.findFragmentByTag(END_DIALOG));
+                ft.remove(fm.findFragmentByTag(RiseTimerStatic.RISE_TIMER_ISSUE_DIALOG));
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                 ft.commit();
-
-                // Refresh view
-                ((WorkoutActivity)getActivity()).onTimerEnded(getArguments().getString(WORKOUT_TYPE));
 
             }
         });
 
 
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null)
+        {
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+            if (dialog.getWindow() != null){
+                dialog.getWindow().setLayout(width, height);
+            }
+
+        }
     }
 
 }

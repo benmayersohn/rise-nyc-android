@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.support.annotation.Nullable;
 import android.widget.CheckBox;
 import android.widget.Button;
@@ -27,14 +26,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  */
 
 public class IntroDialogFragment extends DialogFragment {
-
-
-    private Button okayButton;  // Say OK to close the dialog
-    private CheckBox doNotShowAgain;  // Check if we don't want to show the dialog again
-
-    public final static String SKIP_DIALOG_PREF = "dontShowDialog";
-
-    private static final String DIALOG="fragment_tip";
 
     // Empty constructor
     public IntroDialogFragment(){}
@@ -62,9 +53,7 @@ public class IntroDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_tip, container, false);
-
-        return v;
+        return inflater.inflate(R.layout.fragment_tip, container, false);
     }
 
 
@@ -73,8 +62,8 @@ public class IntroDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get Button and Dialog CheckBox from view
-        okayButton = (Button) view.findViewById(R.id.button);
-        doNotShowAgain = (CheckBox) view.findViewById(R.id.checkBox);
+        Button okayButton = (Button) view.findViewById(R.id.button);
+        CheckBox doNotShowAgain = (CheckBox) view.findViewById(R.id.checkBox);
 
         // Set onClick listener on button
         okayButton.setOnClickListener(new OnClickListener(){
@@ -83,7 +72,7 @@ public class IntroDialogFragment extends DialogFragment {
                 // Close fragment
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.remove(fm.findFragmentByTag(DIALOG));
+                ft.remove(fm.findFragmentByTag(GeneralStatic.FRAGMENT_TIP_TAG));
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                 ft.commit();
 
@@ -92,13 +81,12 @@ public class IntroDialogFragment extends DialogFragment {
 
         // Set checked listener on checkbox
         doNotShowAgain.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                 Editor editor = preferences.edit();
-                editor.putBoolean(SKIP_DIALOG_PREF, doNotShowAgain.isChecked());
-                editor.commit();
+                editor.putBoolean(GeneralStatic.SKIP_DIALOG_PREF, isChecked);
+                editor.apply();
             }
         });
     }

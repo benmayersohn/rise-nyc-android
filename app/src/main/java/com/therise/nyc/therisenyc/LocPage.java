@@ -1,7 +1,5 @@
 package com.therise.nyc.therisenyc;
 
-import android.graphics.Bitmap;
-
 /**
  * Created by mayerzine on 1/16/17.
  *
@@ -9,7 +7,7 @@ import android.graphics.Bitmap;
  * All information needed to generate a workout location page
  */
 
-public class LocPage {
+class LocPage {
 
     // This info will be obtained from SQL database
     private String title;
@@ -19,7 +17,7 @@ public class LocPage {
     private String day;
 
 
-    public LocPage(String title, String place, String day, int img, String desc){
+    LocPage(String title, String place, String day, int img, String desc){
         this.title = title;
         this.place = place;
         this.img = img;
@@ -34,19 +32,19 @@ public class LocPage {
         return title;
     }
 
-    public String getPlace(){
+    String getPlace(){
         return place;
     }
 
-    public int getImg(){
+    int getImg(){
         return img;
     }
 
-    public String getDesc(){
+    String getDesc(){
         return desc;
     }
 
-    public String getDay(){
+    String getDay(){
         return day;
     }
 

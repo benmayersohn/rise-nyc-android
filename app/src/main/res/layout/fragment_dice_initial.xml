@@ -69,14 +69,13 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
-                android:text="@string/time_left"
+                android:id="@+id/numbered1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:id="@+id/dice_one"
-                android:src="@drawable/dice_one"
                 android:gravity="center_vertical"
-                />
+                android:src="@drawable/dice_one"
+                android:text="@string/time_left"
+                android:textAlignment="center" />
 
         </LinearLayout>
 
@@ -124,12 +123,12 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
+                android:id="@+id/save1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/save_1"
                 android:layout_marginTop="2dp"
-                android:src="@drawable/ic_save_black_24dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_save_black_24dp" />
 
         </LinearLayout>
 
@@ -165,14 +164,13 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
-                android:text="@string/time_left"
+                android:id="@+id/numbered2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:id="@+id/dice_two"
-                android:src="@drawable/dice_two"
                 android:gravity="center_vertical"
-                />
+                android:src="@drawable/dice_two"
+                android:text="@string/time_left"
+                android:textAlignment="center" />
 
         </LinearLayout>
 
@@ -220,12 +218,12 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
+                android:id="@+id/save2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/save_2"
                 android:layout_marginTop="2dp"
-                android:src="@drawable/ic_save_black_24dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_save_black_24dp" />
 
         </LinearLayout>
 
@@ -261,14 +259,13 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
-                android:text="@string/time_left"
+                android:id="@+id/numbered3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:id="@+id/dice_three"
-                android:src="@drawable/dice_three"
                 android:gravity="center_vertical"
-                />
+                android:src="@drawable/dice_three"
+                android:text="@string/time_left"
+                android:textAlignment="center" />
 
         </LinearLayout>
 
@@ -316,12 +313,12 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
+                android:id="@+id/save3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/save_3"
                 android:layout_marginTop="2dp"
-                android:src="@drawable/ic_save_black_24dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_save_black_24dp" />
 
         </LinearLayout>
 
@@ -357,14 +354,13 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
-                android:text="@string/time_left"
+                android:id="@+id/numbered4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:id="@+id/dice_four"
-                android:src="@drawable/dice_four"
                 android:gravity="center_vertical"
-                />
+                android:src="@drawable/dice_four"
+                android:text="@string/time_left"
+                android:textAlignment="center" />
 
         </LinearLayout>
 
@@ -412,12 +408,12 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
+                android:id="@+id/save4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/save_4"
                 android:layout_marginTop="2dp"
-                android:src="@drawable/ic_save_black_24dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_save_black_24dp" />
 
         </LinearLayout>
 
@@ -453,14 +449,13 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
-                android:text="@string/time_left"
+                android:id="@+id/numbered5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:id="@+id/dice_five"
-                android:src="@drawable/dice_five"
                 android:gravity="center_vertical"
-                />
+                android:src="@drawable/dice_five"
+                android:text="@string/time_left"
+                android:textAlignment="center" />
 
         </LinearLayout>
 
@@ -508,12 +503,12 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
+                android:id="@+id/save5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/save_5"
                 android:layout_marginTop="2dp"
-                android:src="@drawable/ic_save_black_24dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_save_black_24dp" />
 
         </LinearLayout>
 
@@ -549,14 +544,13 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
-                android:text="@string/time_left"
+                android:id="@+id/numbered6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:id="@+id/dice_six"
-                android:src="@drawable/dice_six"
                 android:gravity="center_vertical"
-                />
+                android:src="@drawable/dice_six"
+                android:text="@string/time_left"
+                android:textAlignment="center" />
 
         </LinearLayout>
 
@@ -604,12 +598,12 @@
             android:layout_gravity="center_vertical">
 
             <ImageView
+                android:id="@+id/save6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/save_6"
                 android:layout_marginTop="2dp"
-                android:src="@drawable/ic_save_black_24dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_save_black_24dp" />
 
         </LinearLayout>
 

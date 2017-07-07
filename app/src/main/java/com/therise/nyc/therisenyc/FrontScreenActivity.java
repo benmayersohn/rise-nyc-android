@@ -12,16 +12,13 @@ import android.view.MenuItem;
 
 public class FrontScreenActivity extends AppCompatActivity {
 
-    private static final String DIALOG="fragment_tip";
-    private static final String SKIP_DIALOG_PREF = "dontShowDialog";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.front_screen);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean skipDialog = preferences.getBoolean(SKIP_DIALOG_PREF,false);
+        boolean skipDialog = preferences.getBoolean(GeneralStatic.SKIP_DIALOG_PREF,false);
 
         if (!(skipDialog)){
             // Show options menu
@@ -47,7 +44,7 @@ public class FrontScreenActivity extends AppCompatActivity {
         DialogFragment newFragment = IntroDialogFragment.newInstance();
 
         // We will only show it if we want to
-        newFragment.show(ft, DIALOG);
+        newFragment.show(ft, GeneralStatic.FRAGMENT_TIP_TAG);
     }
 
     // When options selected

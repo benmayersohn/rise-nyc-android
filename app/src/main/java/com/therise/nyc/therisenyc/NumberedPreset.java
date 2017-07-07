@@ -2,51 +2,19 @@ package com.therise.nyc.therisenyc;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by mayerzine on 3/11/17.
- */
 
 // Both cards and dice involve "numbered presets", because they're essentially the same thing
 // Exercises are assigned to a suit or number, there are "n" total in different positions
 
-
-public class NumberedPreset extends Preset {
-
-    @SerializedName("preset_name")
-    private String presetName;
+class NumberedPreset extends Preset {
 
     @SerializedName("exercises")
     private List<String> exercises;
 
-    private int numExercises;
-
-    public static final String BLANK = "";
-    public static final String BLANK_NAME = "EMPTY";
-
-    public NumberedPreset(String presetName, List<String> exercises){
+    NumberedPreset(String presetName, List<String> exercises){
         this.presetName = presetName;
         this.exercises = exercises;
-        numExercises = exercises.size();
-    }
-
-    // Default empty test preset
-    public NumberedPreset(int numExercises){
-        exercises = new ArrayList<>();
-        this.numExercises = numExercises;
-
-        // Add empty entries
-        for (int i =0; i < numExercises; i++) {
-            exercises.add(BLANK);
-        }
-
-        presetName = BLANK_NAME;
-    }
-
-    public String getName(){
-        return presetName;
     }
 
     // Over-ride equals method
@@ -67,12 +35,7 @@ public class NumberedPreset extends Preset {
         return (preset2.getName().equals(this.getName()));
     }
 
-    // Getters and setters
-    public void setName(String name){
-        presetName = name;
-    }
-
-    public String getExercise(int index){
+    String getExercise(int index){
         return exercises.get(index);
     }
 
