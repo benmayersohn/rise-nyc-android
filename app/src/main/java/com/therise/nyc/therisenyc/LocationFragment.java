@@ -31,7 +31,7 @@ public class LocationFragment extends Fragment {
     private SQLiteDatabase db;
 
     // Constructor
-    public LocationFragment() {};
+    public LocationFragment() {}
 
     // We get the name of the tab and the view from the activity
     public static LocationFragment newInstance(String tabName, String viewType) {
@@ -127,11 +127,6 @@ public class LocationFragment extends Fragment {
         String place;
         String day;
         int img;
-        Bitmap imgBitmap;
-
-        // set height and width of bitmap (in dp)
-        int newHeight = LocationStatic.IMAGE_HEIGHT;
-        int newWidth = LocationStatic.IMAGE_WIDTH;
 
         String desc = null;
 

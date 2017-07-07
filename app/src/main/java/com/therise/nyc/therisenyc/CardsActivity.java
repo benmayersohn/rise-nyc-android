@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -78,7 +77,8 @@ public class CardsActivity extends NumberedActivity {
         void setNewCardView(){
             cardExercise.setText(cardGame.currentCardToExercise());
             currentCard.setText(cardGame.currentCardNumberString());
-            background.setBackground(ContextCompat.getDrawable(context, cardGame.getCurrentCard().getId()));
+
+            background.setBackgroundResource(cardGame.getCurrentCard().getId());
 
             if (cardGame.isFirstCard()){
                 leftArrowDrawable = ContextCompat.getDrawable(context, R.drawable.ic_skip_previous_grey_24dp);

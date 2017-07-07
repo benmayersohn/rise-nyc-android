@@ -16,7 +16,6 @@ class LocPage {
     private String desc;
     private String day;
 
-
     LocPage(String title, String place, String day, int img, String desc){
         this.title = title;
         this.place = place;
