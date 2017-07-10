@@ -127,7 +127,7 @@ class RiseTimer extends SimpleTimer{
 
                     case RiseTimerStatic.WORK:
 
-                        // We either switch to REST or BREAK
+                        // We either switch to WORK or BREAK if we've finished our set
                         if (currRep == numReps)
                         {
                             if (times[RiseTimerStatic.BREAK_INDEX] > 0)
@@ -140,7 +140,7 @@ class RiseTimer extends SimpleTimer{
 
                             }
 
-                            // Otherwise, go back to work on the next set
+                            // Back to work on the next set
                             // and we're on the first rep
                             else
                             {

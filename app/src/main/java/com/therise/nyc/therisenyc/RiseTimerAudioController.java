@@ -124,8 +124,8 @@ class RiseTimerAudioController extends AudioController {
         }
 
         // Ten second marker
-        // Only play if our work time is at least 20 seconds
-        if (riseTimer.getTime(RiseTimerStatic.WORK_INDEX) >= RiseTimerStatic.TEN_SECONDS_MIN_WORK_TIME){
+        // Only play if our work time is at least 20 seconds and we're not currently playing anything
+        if (riseTimer.getTime(RiseTimerStatic.WORK_INDEX) >= RiseTimerStatic.TEN_SECONDS_MIN_WORK_TIME && isStopped()){
             if (riseTimer.isOnTime(WorkoutStatic.TEN_SECONDS)){
                 playSample(R.raw.ten_seconds);
             }
