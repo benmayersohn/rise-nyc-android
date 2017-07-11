@@ -14,13 +14,7 @@ class Card {
     private int number; // number on card
     private String suit; // suit of card
     private String name; // full name of card (for display)
-
-    private boolean _isPictureCard;
-    private boolean _isJoker;
-
-    boolean isPictureCard(){
-        return _isPictureCard;
-    }
+    private boolean isJoker;
 
     // For all cards except jokers
     Card(int number, String suit){
@@ -29,23 +23,18 @@ class Card {
 
         // Do we have a picture card?
         if (number == CardsStatic.JACK_VALUE){
-            _isPictureCard = true;
             name = firstUpperCase(CardsStatic.JACK) + CardsStatic.OF_DISPLAY + firstUpperCase(suit);
         }
         else if (number == CardsStatic.QUEEN_VALUE){
-            _isPictureCard = true;
             name = firstUpperCase(CardsStatic.QUEEN) + CardsStatic.OF_DISPLAY + firstUpperCase(suit);
         }
         else if (number == CardsStatic.KING_VALUE){
-            _isPictureCard = true;
             name = firstUpperCase(CardsStatic.KING) + CardsStatic.OF_DISPLAY + firstUpperCase(suit);
         }
         else if (number == CardsStatic.ACE_VALUE_ONE || number == CardsStatic.ACE_VALUE_TWO){
-            _isPictureCard = true;
             name = firstUpperCase(CardsStatic.ACE) + CardsStatic.OF_DISPLAY + firstUpperCase(suit);
         }
         else{
-            _isPictureCard = false;
             name = number + CardsStatic.OF_DISPLAY + firstUpperCase(suit);
         }
 
@@ -53,7 +42,7 @@ class Card {
         id = CardsStatic.RESOURCE_MAP.get(CardsStatic.NUMBER_MAP.get(number) + CardsStatic.OF_ID + suit);
 
         // Not a joker if we're using this constructor
-        _isJoker = false;
+        isJoker = false;
 
     }
 
@@ -77,7 +66,7 @@ class Card {
         name = firstUpperCase(jokerColor) + CardsStatic.JOKER_NAME_STRING;
         number = CardsStatic.JOKER_VALUE; // The type is a joker
         suit = jokerColor; // Call the suit the color of the joker
-        _isJoker = true; // this is a joker
+        isJoker = true; // this is a joker
     }
 
     // Take lowercase word and make first letter upper case
@@ -99,7 +88,7 @@ class Card {
     }
 
     boolean isJoker(){
-        return _isJoker;
+        return isJoker;
     }
 
     public int getId(){
