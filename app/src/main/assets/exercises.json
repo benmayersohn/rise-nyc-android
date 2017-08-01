@@ -7,6 +7,7 @@
   	{"preset_name":"CRUNCHES"},
     {"preset_name":"DRAGON PUSHUPS"},
     {"preset_name":"FROGGERS"},
+    {"preset_name":"HIGH KNEES"},
     {"preset_name":"JUMP LUNGES"},
     {"preset_name":"JUMPING JACKS"},
     {"preset_name":"MOUNTAIN CLIMBERS"},
@@ -18,8 +19,8 @@
     {"preset_name":"SQUAT JUMPS"},
   	{"preset_name":"SQUATS"},
     {"preset_name":"SUPERMANS"},
-  	{"preset_name":"T-PLANK TWISTS"},
-  	{"preset_name":"T-PLANK PUSHUPS"},
+    {"preset_name":"T-PLANK PUSHUPS"},
+    {"preset_name":"T-PLANK TWISTS"},
     {"preset_name":"TOE TOUCHES"},
     {"preset_name":"V-UPS"},
     {"preset_name":"X-BODY CLIMBERS"}
