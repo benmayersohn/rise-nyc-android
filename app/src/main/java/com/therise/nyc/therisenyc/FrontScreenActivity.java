@@ -1,6 +1,7 @@
 package com.therise.nyc.therisenyc;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -9,6 +10,9 @@ import android.view.Menu;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 public class FrontScreenActivity extends AppCompatActivity {
 
@@ -24,6 +28,68 @@ public class FrontScreenActivity extends AppCompatActivity {
             // Show options menu
             showDialog();
         }
+
+        // Social Media buttons
+        Button fbButton = findViewById(R.id.fb_button);
+        Button instaButton = findViewById(R.id.insta_button);
+        Button twitterButton = findViewById(R.id.twitter_button);
+        Button meetupButton = findViewById(R.id.meetup_button);
+        LinearLayout urlButton = findViewById(R.id.rise_url_button);
+
+        // FACEBOOK
+        fbButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                String facebookUrl = SocialMediaTools.getFacebookPageURL(getApplicationContext());
+                facebookIntent.setData(Uri.parse(facebookUrl));
+                startActivity(facebookIntent);
+            }
+        });
+
+        // INSTA
+        instaButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent instaIntent = new Intent(Intent.ACTION_VIEW);
+                String instaUrl = SocialMediaTools.getInstaURL(getApplicationContext());
+                instaIntent.setData(Uri.parse(instaUrl));
+                startActivity(instaIntent);
+            }
+        });
+
+        // TWITTER
+        twitterButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent twitterIntent = new Intent(Intent.ACTION_VIEW);
+                String twitterUrl = SocialMediaTools.getTwitterURL(getApplicationContext());
+                twitterIntent.setData(Uri.parse(twitterUrl));
+                startActivity(twitterIntent);
+            }
+        });
+
+        // MEETUP
+        meetupButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                String url = GeneralStatic.MEETUP_ADDRESS;
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+            }
+        });
+
+        // WEBSITE
+        urlButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                String url = GeneralStatic.WEB_ADDRESS;
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+            }
+        });
 
     }
 
